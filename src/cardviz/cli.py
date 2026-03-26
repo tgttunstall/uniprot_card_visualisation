@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import os
 from typing import List, Set
 
@@ -18,6 +19,34 @@ DEFAULT_COLORS = {
     "Resistance Mechanism": "deepskyblue",
     "uniprot": "red",
 }
+
+
+def _raw_payload(graph) -> dict:
+    nodes = []
+    for nid, data in graph.nodes(data=True):
+        nodes.append(
+            {
+                "id": nid,
+                "name": data.get("name", nid),
+                "label": data.get("label", nid),
+                "def": data.get("def", ""),
+                "category": data.get("category"),
+                "sources": data.get("sources", []),
+            }
+        )
+
+    edges = []
+    for src, tgt, edata in graph.edges(data=True):
+        edges.append(
+            {
+                "source": src,
+                "target": tgt,
+                "label": edata.get("label", ""),
+                "title": edata.get("title", ""),
+            }
+        )
+
+    return {"nodes": nodes, "edges": edges}
 
 
 def parse_accessions(args: argparse.Namespace) -> List[str]:
@@ -69,6 +98,10 @@ def handle_from_local(args: argparse.Namespace) -> None:
         if args.trace:
             df = trace_graph(graph, accession=acc)
             df.to_csv(os.path.join(outdir, f"trace_{acc}.csv"), index=False)
+        if args.emit_raw:
+            raw = _raw_payload(graph)
+            with open(os.path.join(outdir, f"raw_{acc}.json"), "w") as fh:
+                json.dump(raw, fh, indent=2)
 
 
 def handle_from_api(args: argparse.Namespace) -> None:
@@ -134,6 +167,7 @@ def build_parser() -> argparse.ArgumentParser:
     common.add_argument("--formats", default="pyvis,png", help="Comma list: pyvis,png (default: pyvis,png)")
     common.add_argument("--theme", choices=["dark", "light"], default="dark", help="Visualisation theme")
     common.add_argument("--trace", action="store_true", help="Write trace CSV")
+    common.add_argument("--emit-raw", action="store_true", help="Write raw nodes/edges JSON (no styling)")
 
     local = subparsers.add_parser("from-local", parents=[common], help="Build from CARD flat files")
     local.add_argument("--map-file", required=True)
