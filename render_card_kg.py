@@ -22,7 +22,8 @@ SRC = os.path.join(ROOT, "src")
 if SRC not in sys.path:
     sys.path.insert(0, SRC)
 
-JSON_PATH = os.environ.get("CARD_JSON_PATH", os.path.join(os.path.expanduser("~"), "card_output", "card_subgraph_Q182T3.json"))
+#JSON_PATH = os.environ.get("CARD_JSON_PATH", os.path.join(os.path.expanduser("~"), "card_output", "card_subgraph_Q182T3.json"))
+JSON_PATH = os.environ.get("CARD_JSON_PATH", os.path.join(os.path.expanduser("~"), "card_output", "card_subgraph_A6T5M6.json"))
 OUTDIR = os.path.expanduser(os.environ.get("CARD_OUTDIR", os.path.join(os.path.expanduser("~"), "card_output")))
 ACCESSION = os.environ.get("CARD_ACCESSION")
 

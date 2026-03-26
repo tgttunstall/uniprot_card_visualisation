@@ -25,7 +25,8 @@ OBO_FILE = "/home/tunstall/amr/databases/card/ontology/aro.obo"
 CARD_JSON = "/home/tunstall/amr/databases/card/data/card.json"
 CATEGORIES = "/home/tunstall/amr/databases/card/data/aro_categories.tsv"
 
-ACCESSION = os.environ.get("CARD_ACCESSION", "Q182T3")
+#ACCESSION = os.environ.get("CARD_ACCESSION", "Q182T3")
+ACCESSION = os.environ.get("CARD_ACCESSION", "A6T5M6")
 OUTDIR = os.path.expanduser(os.environ.get("CARD_OUTDIR", os.path.join(os.path.expanduser("~"), "card_output")))
 
 

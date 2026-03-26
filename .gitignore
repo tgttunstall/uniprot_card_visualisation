@@ -14,5 +14,6 @@ build/
 dist/
 *.egg-info/
 *.log
+lib/
 .DS_Store
 Thumbs.db
