@@ -31,8 +31,10 @@ from card_vis_render import (
 
 def parse_args():
     p = argparse.ArgumentParser(description="Render CARD KG from subgraph JSON")
-    p.add_argument("--accession", default="Q182T3")
-    p.add_argument("--subgraph-json", default=None, help="Path to subgraph JSON (default: ~/card_output/card_subgraph_<ACC>.json)")
+    #p.add_argument("--accession", default="Q182T3")
+    #p.add_argument("--subgraph-json", default=None, help="Path to subgraph JSON (default: ~/card_output/card_subgraph_<ACC>.json)")
+    p.add_argument("--accession", default = None, help="UniProt accession")
+    p.add_argument("--subgraph-json", default=None, help="Path to subgraph JSON")
     p.add_argument("--outdir", default=os.path.join(os.path.expanduser("~"), "card_output"))
     p.add_argument("--formats", default="pyvis", help="Comma list: pyvis")
     p.add_argument("--theme", choices=["dark", "light"], default="dark")
