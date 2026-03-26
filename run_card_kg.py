@@ -31,7 +31,8 @@ OUTDIR = os.path.expanduser(os.environ.get("CARD_OUTDIR", os.path.join(os.path.e
 def main() -> None:
     cmd = [
         "python",
-        os.path.join(ROOT, "cli.py"),
+        "-m",
+        "cardviz.cli",
         "from-api-json",
         "--api-mode",
         "create",
