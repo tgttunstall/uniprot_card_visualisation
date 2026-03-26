@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 """
-Convenience runner to:
-1) Extract the bare CARD subgraph JSON for a UniProt accession (no styling).
-2) Render the KG from that JSON (PyVis + PNG).
+Extract the bare CARD subgraph JSON for a UniProt accession (no rendering).
 
 Defaults target local CARD files under /home/tunstall/amr; override via env vars:
   CARD_ACCESSION   (default: Q182T3)
@@ -34,7 +32,7 @@ OUTDIR = os.path.expanduser(os.environ.get("CARD_OUTDIR", os.path.join(os.path.e
 def main() -> None:
     raw_path = os.path.join(OUTDIR, f"card_subgraph_{ACCESSION}.json")
 
-    # 1) Extract bare subgraph
+    # Extract bare subgraph
     extract_cmd = [
         "python",
         os.path.join(ROOT, "extract_card_subgraph.py"),
@@ -57,32 +55,7 @@ def main() -> None:
     print(" ".join(extract_cmd))
     subprocess.run(extract_cmd, check=True)
 
-    # 2) Render from raw JSON
-    render_cmd = [
-        "python",
-        "-m",
-        "cardviz.cli",
-        "from-api-json",
-        "--api-mode",
-        "use",
-        "--api-json-path",
-        raw_path,
-        "--outdir",
-        OUTDIR,
-        "--formats",
-        "pyvis,png",
-        "--theme",
-        "dark",
-        "--accession",
-        ACCESSION,
-    ]
-
-    print("Running (render):")
-    print(" ".join(render_cmd))
-
-    env = os.environ.copy()
-    env["PYTHONPATH"] = SRC + os.pathsep + env.get("PYTHONPATH", "")
-    subprocess.run(render_cmd, check=True, env=env)
+    print(f"Subgraph written to {raw_path}")
 
 
 if __name__ == "__main__":

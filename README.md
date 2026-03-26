@@ -58,7 +58,7 @@ Add `--trace` to emit a `trace_<ACC>.csv` debug table per accession. Default out
 
 ### Convenience runner
 
-`run_card_kg.py` wraps the API-mock creation flow for one accession (defaults to Q182T3) using the local CARD files under `/home/tunstall/amr`. Override with env vars:
+`run_card_kg.py` now only extracts the bare subgraph JSON (defaults to Q182T3) using local CARD files under `/home/tunstall/amr`. Override with env vars:
 
 ```bash
 export CARD_ACCESSION=Q182T3
@@ -66,7 +66,17 @@ export CARD_OUTDIR=~/card_output
 python run_card_kg.py
 ```
 
-This produces `card_api_mock_<ACC>.json`, `<ACC>.html` (PyVis), `<ACC>.png`, and `trace_<ACC>.csv` in `CARD_OUTDIR`.
+This produces `card_subgraph_<ACC>.json` in `CARD_OUTDIR`.
+
+To render from an extracted JSON, use `render_card_kg.py` (assumes the JSON path):
+
+```bash
+export CARD_JSON_PATH=~/card_output/card_subgraph_Q182T3.json
+export CARD_OUTDIR=~/card_output
+python render_card_kg.py
+```
+
+This produces `<ACC>.html` (PyVis) and `<ACC>.png` in `CARD_OUTDIR`.
 
 ## Provenance of code
 - Ported from `~/git/card_analysis/common_functions.py`: mapping lookup, CARD subgraph extraction (aro.obo), category colouring (aro_categories.tsv), antibiotic highlighting via `confers_resistance_to_antibiotic`, and variant/SNP enrichment from `card.json`.
