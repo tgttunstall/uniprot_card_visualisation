@@ -67,3 +67,7 @@ python run_card_kg.py
 ```
 
 This produces `card_api_mock_<ACC>.json`, `<ACC>.html` (PyVis), `<ACC>.png`, and `trace_<ACC>.csv` in `CARD_OUTDIR`.
+
+## Provenance of code
+- Ported from `~/git/card_analysis/common_functions.py`: mapping lookup, CARD subgraph extraction (aro.obo), category colouring (aro_categories.tsv), antibiotic highlighting via `confers_resistance_to_antibiotic`, and variant/SNP enrichment from `card.json`.
+- New in this repo: API-style payload conversion (`api_payload.py`), PyVis/PNG rendering with bundled options (`visualize.py`), CLI glue (`cardviz/cli.py` + top-level `cli.py`), trace export (`trace_utils.py`), and label/title wrapping/styling helpers in `graph_builder.py` for readability.
