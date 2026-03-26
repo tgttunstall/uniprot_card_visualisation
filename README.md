@@ -58,25 +58,13 @@ Add `--trace` to emit a `trace_<ACC>.csv` debug table per accession. Default out
 
 ### Convenience runner
 
-`run_extract_card_subgraph.py` extracts the bare subgraph JSON (defaults to Q182T3) using local CARD files under `/home/tunstall/amr`. Override with env vars:
+`run_card_kg.py` is a unified runner:
 
-```bash
-export CARD_ACCESSION=Q182T3
-export CARD_OUTDIR=~/card_output
-python run_extract_card_subgraph.py
-```
+- Extract only: `python run_card_kg.py --step extract --accession Q182T3`
+- Render only: `CARD_JSON_PATH=~/card_output/card_subgraph_Q182T3.json python run_card_kg.py --step render`
+- Do both (default): `python run_card_kg.py --accession Q182T3 --include-uniprot`
 
-This produces `card_subgraph_<ACC>.json` in `CARD_OUTDIR`.
-
-To render from an extracted JSON, use `run_render_card_kg.py` (assumes the JSON path):
-
-```bash
-export CARD_JSON_PATH=~/card_output/card_subgraph_Q182T3.json
-export CARD_OUTDIR=~/card_output
-python run_render_card_kg.py
-```
-
-This produces `<ACC>.html` (PyVis) and `<ACC>.png` in `CARD_OUTDIR`.
+Defaults target `/home/tunstall/amr` bulk files and write to `~/card_output/card_subgraph_<ACC>.json`; override paths/envs as needed.
 
 ## Provenance of code
 - Ported from `~/git/card_analysis/common_functions.py`: mapping lookup, CARD subgraph extraction (aro.obo), category colouring (aro_categories.tsv), antibiotic highlighting via `confers_resistance_to_antibiotic`, and variant/SNP enrichment from `card.json`.
