@@ -1,0 +1,69 @@
+# UniProt CARD Visualisation
+
+Lightweight CLI to build interactive CARD knowledge graphs for UniProt accessions. Two modes:
+
+- `from-local`: build directly from CARD flat files.
+- `from-api-json`: either generate a mock API JSON (`create`) or render from an existing API-style JSON (`use`).
+
+## Quick start
+
+Create and activate the venv (already prepared):
+
+```bash
+python -m venv ~/myenvs/cardvis_env
+source ~/myenvs/cardvis_env/bin/activate
+pip install -r cardvis_env_requirements.txt
+```
+
+Run from local CARD files (dark theme, PyVis HTML + PNG):
+
+```bash
+python -m cli from-local \
+  --accession Q182T3 \
+  --map-file /home/tunstall/amr/map_tsv/CARD-UniProt-Mapping.tsv \
+  --obo-file /home/tunstall/amr/databases/card/ontology/aro.obo \
+  --card-json /home/tunstall/amr/databases/card/data/card.json \
+  --categories-file /home/tunstall/amr/databases/card/data/aro_categories.tsv \
+  --outdir ~/card_output \
+  --formats pyvis,png \
+  --theme dark
+```
+
+Generate mock API JSON then render from it (light theme example):
+
+```bash
+python -m cli from-api-json \
+  --api-mode create \
+  --accession Q182T3 \
+  --map-file /home/tunstall/amr/map_tsv/CARD-UniProt-Mapping.tsv \
+  --obo-file /home/tunstall/amr/databases/card/ontology/aro.obo \
+  --card-json /home/tunstall/amr/databases/card/data/card.json \
+  --categories-file /home/tunstall/amr/databases/card/data/aro_categories.tsv \
+  --outdir ~/card_output \
+  --formats pyvis \
+  --theme light
+```
+
+Render from an existing API JSON:
+
+```bash
+python -m cli from-api-json \
+  --api-mode use \
+  --api-json-path ~/card_output/card_api_mock_Q182T3.json \
+  --outdir ~/card_output \
+  --formats pyvis
+```
+
+Add `--trace` to emit a `trace_<ACC>.csv` debug table per accession. Default output directory is `~/card_output` and is created if missing. Themes: `dark` (default) or `light`. Formats: `pyvis` (HTML, interactive) and optional `png` snapshot.
+
+### Convenience runner
+
+`run_card_kg.py` wraps the API-mock creation flow for one accession (defaults to Q182T3) using the local CARD files under `/home/tunstall/amr`. Override with env vars:
+
+```bash
+export CARD_ACCESSION=Q182T3
+export CARD_OUTDIR=~/card_output
+python run_card_kg.py
+```
+
+This produces `card_api_mock_<ACC>.json`, `<ACC>.html` (PyVis), `<ACC>.png`, and `trace_<ACC>.csv` in `CARD_OUTDIR`.

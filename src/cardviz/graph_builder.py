@@ -1,0 +1,240 @@
+from __future__ import annotations
+
+from pathlib import Path
+from typing import Dict, Iterable, List, Optional, Tuple
+
+import json
+
+import obonet
+import pandas as pd
+import networkx as nx
+
+
+GENERAL_ARO_NODES = {
+    "ARO:1000001",  # process or component of antibiotic biology or chemistry
+    "ARO:1000002",  # mechanism of antibiotic resistance
+    "ARO:1000003",  # antibiotic molecule
+    "ARO:3000000",  # determinant of antibiotic resistance
+}
+
+
+def _pick_column(df: pd.DataFrame, candidates: Iterable[str]) -> Optional[str]:
+    lower_cols = {c.lower(): c for c in df.columns}
+    for cand in candidates:
+        if cand.lower() in lower_cols:
+            return lower_cols[cand.lower()]
+    return None
+
+
+def _load_mapping(map_file: Path, accession: str) -> Tuple[str, str]:
+    df = pd.read_csv(map_file, sep="\t")
+
+    acc_col = _pick_column(df, ["UPKB", "UniProtKB_acc", "UniProtKB", "acc", "ACCESSION"])
+    if acc_col is None:
+        acc_col = df.columns[0]
+
+    aro_col = _pick_column(df, ["ARO Accession", "ARO", "ARO_accession"])
+    if aro_col is None:
+        raise ValueError("ARO accession column not found in mapping file")
+
+    matches = df.loc[df[acc_col].astype(str) == accession]
+    if matches.empty:
+        raise ValueError(f"Accession {accession} not found in mapping file {map_file}")
+
+    aro_val = matches[aro_col].iloc[0]
+    aro = str(aro_val)
+    return str(acc_col), aro
+
+
+def _extract_subgraph(obo_path: Path, aro: str) -> nx.MultiDiGraph:
+    obo_graph: nx.MultiDiGraph = obonet.read_obo(obo_path)
+    if aro not in obo_graph:
+        raise ValueError(f"ARO {aro} not found in {obo_path}")
+    descendants = nx.descendants(obo_graph, aro)
+    descendants.add(aro)
+    sub = obo_graph.subgraph(descendants).copy()
+    out = nx.MultiDiGraph()
+    out.add_nodes_from(sub.nodes(data=True))
+    for u, v, key, data in sub.edges(keys=True, data=True):
+        out.add_edge(u, v, key=key, **data)
+    return out
+
+
+def _label_from_synonym(synonym_list: Optional[List[str]]) -> Optional[str]:
+    if not synonym_list:
+        return None
+    for syn in synonym_list:
+        if "CARD_Short_Name" in syn:
+            # synonyms look like "ABC" EXACT CARD_Short_Name []
+            parts = syn.split("\"")
+            if len(parts) >= 3:
+                return parts[1]
+    return None
+
+
+def _add_variants(card_json: Path, aro: str, graph: nx.MultiDiGraph, colors: Dict[str, str]) -> None:
+    with open(card_json, "r") as fh:
+        data = json.load(fh)
+
+    for entry in data.values():
+        if not isinstance(entry, dict):
+            continue
+        if str(entry.get("ARO_accession")) != aro:
+            continue
+        if entry.get("model_type") != "protein variant model":
+            continue
+
+        variant_root = "SNPs"
+        graph.add_node(
+            variant_root,
+            name="SNPs",
+            label="SNPs",
+            title=entry.get("model_description", ""),
+            group="card",
+            color=colors.get("card", "blue"),
+            sources=["card.json"],
+            category="variant",
+        )
+        graph.add_edge(aro, variant_root, label=entry.get("model_type", "variant"))
+
+        snps = entry.get("model_param", {}).get("snp", {}).get("param_value", {})
+        for snp in snps.values():
+            graph.add_node(
+                snp,
+                name=snp,
+                label=snp,
+                title=snp,
+                group="card",
+                color=colors.get("card", "blue"),
+                sources=["card.json"],
+                category="variant",
+            )
+            graph.add_edge(
+                variant_root,
+                snp,
+                label=entry.get("model_param", {}).get("snp", {}).get("param_type", "snp"),
+            )
+
+
+def build_card_graph(
+    accession: str,
+    map_file: Path,
+    obo_file: Path,
+    card_json: Path,
+    categories_file: Path,
+    colors: Dict[str, str],
+    remove_general: bool = True,
+) -> Tuple[nx.MultiDiGraph, str]:
+    """Build CARD-only graph for a UniProt accession. Returns graph and root ARO."""
+
+    _, aro = _load_mapping(map_file, accession)
+    graph = _extract_subgraph(obo_file, aro)
+
+    cat_df = pd.read_csv(categories_file, sep="\t")
+    # Map ARO Accession -> ARO Category
+    cat_map = dict(zip(cat_df[cat_df.columns[1]], cat_df[cat_df.columns[0]]))
+
+    antibiotic_nodes = set()
+    for src, tgt, key in graph.edges(keys=True):
+        graph.edges[src, tgt, key]["label"] = key
+        if key == "confers_resistance_to_antibiotic":
+            antibiotic_nodes.add(tgt)
+
+    for node, data in graph.nodes(data=True):
+        syn = data.get("synonym")
+        label = _label_from_synonym(syn) or data.get("name", node)
+        title = f"{node}: {data.get('name', '')}; {data.get('def', '')}"
+
+        group = "card"
+        color = colors.get("card", "blue")
+        category = None
+        sources = set()
+
+        if node in cat_map:
+            category = cat_map[node]
+            color = colors.get(category, color)
+            sources.add("aro_categories.tsv")
+
+        if node in antibiotic_nodes:
+            category = category or "Antibiotic"
+            color = colors.get("Antibiotic", color)
+            sources.add("aro.obo")
+
+        sources.add("aro.obo")
+
+        graph.nodes[node].update(
+            {
+                "name": data.get("name", node),
+                "label": label,
+                "title": title,
+                "group": group,
+                "color": color,
+                "category": category,
+                "sources": sorted(sources),
+            }
+        )
+
+        if "synonym" in graph.nodes[node]:
+            del graph.nodes[node]["synonym"]
+
+    _add_variants(card_json, aro, graph, colors)
+
+    if remove_general:
+        for node in list(graph.nodes()):
+            if node in GENERAL_ARO_NODES and node in graph:
+                graph.remove_node(node)
+
+    return graph, aro
+
+
+def attach_uniprot_node(graph: nx.MultiDiGraph, accession: str, aro: str, colors: Dict[str, str]) -> nx.MultiDiGraph:
+    G = nx.MultiDiGraph()
+    G.add_node(
+        accession,
+        name=accession,
+        label=accession,
+        title=accession,
+        group="uniprot",
+        color=colors.get("uniprot", "red"),
+        category=None,
+        sources=["input"],
+    )
+    G = nx.union(G, graph)
+    G.add_edge(accession, aro, label="is")
+    return G
+
+
+def _wrap(text: str, n: int) -> str:
+    words = text.split()
+    lines = []
+    current: list[str] = []
+    for w in words:
+        current.append(w)
+        if len(" ".join(current)) >= n:
+            lines.append(" ".join(current))
+            current = []
+    if current:
+        lines.append(" ".join(current))
+    return "\n".join(lines)
+
+
+def apply_styling(graph: nx.MultiDiGraph) -> None:
+    for node in graph.nodes:
+        in_deg = graph.in_degree(node)
+        graph.nodes[node]["label"] = _wrap(str(graph.nodes[node].get("label", "")), 35)
+        graph.nodes[node]["title"] = _wrap(str(graph.nodes[node].get("title", "")), 80)
+        graph.nodes[node]["font_size"] = 45 + in_deg * 2
+        graph.nodes[node]["size"] = 25 + in_deg * 6
+        graph.nodes[node]["font_color"] = graph.nodes[node].get("font_color", "white")
+
+    for _, _, _, data in graph.edges(keys=True, data=True):
+        data["width"] = 2
+        data["font_size"] = 18
+        data["font_face"] = "arial"
+        data["font_color"] = "gray"
+        if data.get("label") == "is_a":
+            data["color"] = "olive"
+            data["font_color"] = "olivedrab"
+        elif data.get("label") and "confers_resistance_to" in data["label"]:
+            data["color"] = "firebrick"
+            data["font_color"] = "indianred"
