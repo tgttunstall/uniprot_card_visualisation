@@ -161,11 +161,19 @@ def handle_from_api(args: argparse.Namespace) -> None:
         if not args.api_json_path:
             raise SystemExit("--api-json-path is required in 'use' mode")
         payload = load_payload(args.api_json_path)
+        # If payload is a string (path), load it; otherwise expect dict
+        if isinstance(payload, str):
+            with open(payload, "r") as fh:
+                payload = json.load(fh)
         graph = payload_to_graph(payload)
         apply_category_colors(graph, DEFAULT_COLORS)
         apply_styling(graph)
 
-        acc = payload.get("uniprot", {}).get("id", args.accession[0] if args.accession else "graph")
+        acc = payload.get("uniprot")
+        if isinstance(acc, dict):
+            acc = acc.get("id", acc.get("accession", acc))
+        if not acc:
+            acc = args.accession[0] if args.accession else "graph"
         html_file = os.path.join(outdir, f"{acc}.html")
         png_file = os.path.join(outdir, f"{acc}.png")
         if "pyvis" in formats:
