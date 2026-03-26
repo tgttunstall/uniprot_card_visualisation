@@ -218,7 +218,8 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--card-json", required=True)
     p.add_argument("--categories-file", required=True)
     p.add_argument("--out", required=True, help="Output JSON path")
-    p.add_argument("--include-uniprot", action="store_true", help="Include UniProt node and edge to ARO root")
+    p.add_argument("--include-uniprot", action="store_true", help="Include UniProt node and edge to ARO root if provided")
+    p.add_argument("--verbose", action="store_true", help="Print resolved ARO root and inputs")
     return p.parse_args()
 
 
@@ -228,6 +229,17 @@ def main() -> None:
     aro_override = args.aro_root
     if not aro_override and not args.map_file:
         raise SystemExit("--map-file is required unless --aro-root is provided")
+
+    if args.verbose:
+        print(f"accession:   {args.accession}")
+        print(f"aro_root:    {aro_override or 'lookup from map'}")
+        if args.map_file:
+            print(f"map_file:    {args.map_file}")
+        print(f"obo_file:    {args.obo_file}")
+        print(f"card_json:   {args.card_json}")
+        print(f"categories:  {args.categories_file}")
+        print(f"out:         {args.out}")
+        print(f"include UP:  {bool(args.include_uniprot)}")
 
     graph, aro = card_graph(
         accession=args.accession,
