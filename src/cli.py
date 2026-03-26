@@ -17,7 +17,6 @@ from card_vis_render import (
     apply_styling,
     load_payload,
     payload_to_graph,
-    render_png,
     render_pyvis,
     trace_graph,
     graph_to_api_payload,
@@ -64,12 +63,9 @@ def handle_from_local(args: argparse.Namespace) -> None:
         apply_styling(graph)
 
         html_file = os.path.join(outdir, f"{acc}.html")
-        png_file = os.path.join(outdir, f"{acc}.png")
 
         if "pyvis" in formats:
             render_pyvis(graph, html_file=html_file, theme=args.theme)
-        if "png" in formats:
-            render_png(graph, png_file=png_file)
 
         if args.trace:
             df = trace_graph(graph, accession=acc)
@@ -126,11 +122,8 @@ def handle_from_api(args: argparse.Namespace) -> None:
             save_payload(payload, os.path.join(outdir, api_name))
 
             html_file = os.path.join(outdir, f"{acc}.html")
-            png_file = os.path.join(outdir, f"{acc}.png")
             if "pyvis" in formats:
                 render_pyvis(graph, html_file=html_file, theme=args.theme)
-            if "png" in formats:
-                render_png(graph, png_file=png_file)
             if args.trace:
                 df = trace_graph(graph, accession=acc)
                 df.to_csv(os.path.join(outdir, f"trace_{acc}.csv"), index=False)
@@ -149,11 +142,8 @@ def handle_from_api(args: argparse.Namespace) -> None:
         if not acc:
             acc = args.accession[0] if args.accession else "graph"
         html_file = os.path.join(outdir, f"{acc}.html")
-        png_file = os.path.join(outdir, f"{acc}.png")
         if "pyvis" in formats:
             render_pyvis(graph, html_file=html_file, theme=args.theme)
-        if "png" in formats:
-            render_png(graph, png_file=png_file)
         if args.trace:
             df = trace_graph(graph, accession=acc)
             df.to_csv(os.path.join(outdir, f"trace_{acc}.csv"), index=False)
@@ -167,7 +157,7 @@ def build_parser() -> argparse.ArgumentParser:
     common.add_argument("--accession", action="append", help="UniProt accession (repeatable)")
     common.add_argument("--accessions-file", help="File with UniProt accessions (one per line)")
     common.add_argument("--outdir", default=os.path.join(os.path.expanduser("~"), "card_output"), help="Output directory (default: ~/card_output)")
-    common.add_argument("--formats", default="pyvis,png", help="Comma list: pyvis,png (default: pyvis,png)")
+    common.add_argument("--formats", default="pyvis", help="Comma list: pyvis (default: pyvis)")
     common.add_argument("--theme", choices=["dark", "light"], default="dark", help="Visualisation theme")
     common.add_argument("--trace", action="store_true", help="Write trace CSV")
     common.add_argument("--emit-raw", action="store_true", help="Write raw nodes/edges JSON (no styling)")

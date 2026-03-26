@@ -90,7 +90,7 @@ CLI entrypoint: `python src/cli.py ...` (you can also do `PYTHONPATH=./src pytho
 
 Run scripts:
 - Extract: `python run_extract_card_subgraph.py --accession Q182T3 --include-uniprot`
-- Render:  `python run_render_kg.py --accession Q182T3 --subgraph-json ~/card_output/card_subgraph_Q182T3.json`
+- Render (PyVis HTML): `python run_render_kg.py --accession Q182T3 --subgraph-json ~/card_output/card_subgraph_Q182T3.json`
 
 ## Provenance of code
 - Ported from `~/git/card_analysis/common_functions.py`: mapping lookup, CARD subgraph extraction (aro.obo), category colouring (aro_categories.tsv), antibiotic highlighting via `confers_resistance_to_antibiotic`, and variant/SNP enrichment from `card.json`.

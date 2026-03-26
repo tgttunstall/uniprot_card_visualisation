@@ -206,6 +206,7 @@ def render_pyvis(graph: nx.MultiDiGraph, html_file: str, theme: str = "dark") ->
 
 
 def render_png(graph: nx.MultiDiGraph, png_file: str, layout: str = "spring") -> None:
+    raise RuntimeError("PNG rendering is disabled; use pyvis HTML output")
     import matplotlib.pyplot as plt
     import numpy as np
 
