@@ -3,38 +3,27 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import sys
 from typing import List, Set
 
-from cardviz.graph_builder import build_card_graph, attach_uniprot_node, apply_styling
-from cardviz.api_payload import graph_to_api_payload, payload_to_graph, save_payload, load_payload
-from cardviz.visualize import render_pyvis, render_png
-from cardviz.trace_utils import trace_graph
+BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if BASE not in sys.path:
+    sys.path.insert(0, BASE)
 
-
-DEFAULT_COLORS = {
-    "card": "blue",
-    "Antibiotic": "rebeccapurple",
-    "Drug Class": "mediumorchid",
-    "AMR Gene Family": "steelblue",
-    "Resistance Mechanism": "deepskyblue",
-    "uniprot": "red",
-}
-
-
-def apply_category_colors(graph, colors):
-    for nid, data in graph.nodes(data=True):
-        if data.get("color"):
-            continue
-        cat = data.get("category") or data.get("group")
-        if cat in colors:
-            graph.nodes[nid]["color"] = colors[cat]
-            graph.nodes[nid]["group"] = cat
-        else:
-            graph.nodes[nid]["color"] = colors.get("card", "blue")
-            graph.nodes[nid]["group"] = data.get("group", "card")
-        graph.nodes[nid].setdefault("font_color", "white")
-        if not graph.nodes[nid].get("title"):
-            graph.nodes[nid]["title"] = f"{nid}: {graph.nodes[nid].get('name', nid)}; {graph.nodes[nid].get('def', '')}"
+from card_vis_functions import (
+    DEFAULT_COLORS,
+    apply_category_colors,
+    apply_styling,
+    attach_uniprot_node,
+    build_card_graph,
+    graph_to_api_payload,
+    load_payload,
+    payload_to_graph,
+    render_png,
+    render_pyvis,
+    save_payload,
+    trace_graph,
+)
 
 
 def _raw_payload(graph) -> dict:
