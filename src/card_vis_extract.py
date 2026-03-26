@@ -9,17 +9,6 @@ import networkx as nx
 import obonet
 import pandas as pd
 
-
-DEFAULT_COLORS = {
-    "card": "blue",
-    "Antibiotic": "rebeccapurple",
-    "Drug Class": "mediumorchid",
-    "AMR Gene Family": "steelblue",
-    "Resistance Mechanism": "deepskyblue",
-    "uniprot": "red",
-    "variant": "darkorange",
-}
-
 GENERAL_ARO_NODES = {
     "ARO:1000001",
     "ARO:1000002",
@@ -74,7 +63,7 @@ def _label_from_synonym(synonym_list: Optional[List[str]]) -> Optional[str]:
     return None
 
 
-def add_variants(card_json: str, aro: str, graph: nx.MultiDiGraph, colors: Dict[str, str]) -> None:
+def add_variants(card_json: str, aro: str, graph: nx.MultiDiGraph) -> None:
     with open(card_json, "r") as fh:
         data = json.load(fh)
 
@@ -91,14 +80,12 @@ def add_variants(card_json: str, aro: str, graph: nx.MultiDiGraph, colors: Dict[
 
         variant_root = "SNPs"
         param_desc = entry.get("model_param", {}).get("snp", {}).get("param_description", "")
-        variant_color = colors.get("variant", colors.get("card", "blue"))
         graph.add_node(
             variant_root,
             name="SNPs",
             label="SNPs",
             title=param_desc,
             group="card",
-            color=variant_color,
             sources=["card.json"],
             category="variant",
         )
@@ -112,7 +99,6 @@ def add_variants(card_json: str, aro: str, graph: nx.MultiDiGraph, colors: Dict[
                 label=snp,
                 title=snp,
                 group="card",
-                color=variant_color,
                 sources=["card.json"],
                 category="variant",
             )
@@ -129,7 +115,6 @@ def build_card_graph(
     obo_file: str,
     card_json: str,
     categories_file: str,
-    colors: Dict[str, str],
     remove_general: bool = True,
     aro_override: Optional[str] = None,
 ) -> Tuple[nx.MultiDiGraph, str]:
@@ -151,18 +136,15 @@ def build_card_graph(
         title = f"{node}: {data.get('name', '')}; {data.get('def', '')}"
 
         group = "card"
-        color = colors.get("card", "blue")
         category = None
         sources = set()
 
         if node in cat_map:
             category = cat_map[node]
-            color = colors.get(category, color)
             sources.add("aro_categories.tsv")
 
         if node in antibiotic_nodes:
             category = category or "Antibiotic"
-            color = colors.get("Antibiotic", color)
             sources.add("aro.obo")
 
         sources.add("aro.obo")
@@ -173,7 +155,6 @@ def build_card_graph(
                 "label": label,
                 "title": title,
                 "group": group,
-                "color": color,
                 "category": category,
                 "sources": sorted(sources),
             }
@@ -182,7 +163,7 @@ def build_card_graph(
         if "synonym" in graph.nodes[node]:
             del graph.nodes[node]["synonym"]
 
-    add_variants(card_json, aro, graph, colors)
+    add_variants(card_json, aro, graph)
 
     if remove_general:
         for node in list(graph.nodes()):
@@ -192,7 +173,7 @@ def build_card_graph(
     return graph, aro
 
 
-def attach_uniprot_node(graph: nx.MultiDiGraph, accession: str, aro: str, colors: Dict[str, str]) -> nx.MultiDiGraph:
+def attach_uniprot_node(graph: nx.MultiDiGraph, accession: str, aro: str) -> nx.MultiDiGraph:
     G = nx.MultiDiGraph()
     G.add_node(
         accession,
@@ -200,7 +181,6 @@ def attach_uniprot_node(graph: nx.MultiDiGraph, accession: str, aro: str, colors
         label=accession,
         title=accession,
         group="uniprot",
-        color=colors.get("uniprot", "red"),
         category=None,
         sources=["input"],
     )
