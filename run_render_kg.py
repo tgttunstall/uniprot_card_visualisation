@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import json
 import os
 import sys
 
@@ -36,6 +37,7 @@ def parse_args():
     p.add_argument("--formats", default="pyvis", help="Comma list: pyvis")
     p.add_argument("--theme", choices=["dark", "light"], default="dark")
     p.add_argument("--trace", action="store_true", help="Write trace CSV")
+    p.add_argument("--trace-json", action="store_true", help="Write fully styled nodes/edges JSON")
     return p.parse_args()
 
 
@@ -78,6 +80,23 @@ def main() -> None:
         else:
             with open(trace_path, "w") as fh:
                 fh.write("")
+
+    if args.trace_json:
+        tj_path = os.path.join(args.outdir, f"trace_json_{args.accession}.json")
+        os.makedirs(os.path.dirname(os.path.abspath(tj_path)), exist_ok=True)
+        payload = {
+            "uniprot": args.accession,
+            "nodes": [
+                {"id": nid, **{k: v for k, v in data.items()}}
+                for nid, data in graph.nodes(data=True)
+            ],
+            "edges": [
+                {"source": src, "target": tgt, **{k: v for k, v in data.items()}}
+                for src, tgt, data in graph.edges(data=True)
+            ],
+        }
+        with open(tj_path, "w") as fh:
+            json.dump(payload, fh, indent=2)
 
     print(f"Rendered to {html_file}")
 
