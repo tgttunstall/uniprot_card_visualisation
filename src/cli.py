@@ -1,14 +1,10 @@
+#!/usr/bin/env python
 from __future__ import annotations
 
 import argparse
 import json
 import os
-import sys
 from typing import List, Set
-
-BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-if BASE not in sys.path:
-    sys.path.insert(0, BASE)
 
 from card_vis_functions import (
     DEFAULT_COLORS,
@@ -24,38 +20,6 @@ from card_vis_functions import (
     save_payload,
     trace_graph,
 )
-
-
-def _raw_payload(graph) -> dict:
-    nodes = []
-    for nid, data in graph.nodes(data=True):
-        title = data.get("title")
-        if not title:
-            title = f"{nid}: {data.get('name', nid)}; {data.get('def', '')}"
-        nodes.append(
-            {
-                "id": nid,
-                "name": data.get("name", nid),
-                "label": data.get("label", nid),
-                "def": data.get("def", ""),
-                "category": data.get("category"),
-                "sources": data.get("sources", []),
-                "title": title,
-            }
-        )
-
-    edges = []
-    for src, tgt, edata in graph.edges(data=True):
-        edges.append(
-            {
-                "source": src,
-                "target": tgt,
-                "label": edata.get("label", ""),
-                "title": edata.get("title", ""),
-            }
-        )
-
-    return {"nodes": nodes, "edges": edges}
 
 
 def parse_accessions(args: argparse.Namespace) -> List[str]:
@@ -108,7 +72,29 @@ def handle_from_local(args: argparse.Namespace) -> None:
             df = trace_graph(graph, accession=acc)
             df.to_csv(os.path.join(outdir, f"trace_{acc}.csv"), index=False)
         if args.emit_raw:
-            raw = _raw_payload(graph)
+            raw = {
+                "nodes": [
+                    {
+                        "id": nid,
+                        "name": data.get("name", nid),
+                        "label": data.get("label", nid),
+                        "def": data.get("def", ""),
+                        "category": data.get("category"),
+                        "sources": data.get("sources", []),
+                        "title": data.get("title", data.get("def", "")),
+                    }
+                    for nid, data in graph.nodes(data=True)
+                ],
+                "edges": [
+                    {
+                        "source": src,
+                        "target": tgt,
+                        "label": edata.get("label", ""),
+                        "title": edata.get("title", ""),
+                    }
+                    for src, tgt, edata in graph.edges(data=True)
+                ],
+            }
             with open(os.path.join(outdir, f"raw_{acc}.json"), "w") as fh:
                 json.dump(raw, fh, indent=2)
 
@@ -150,10 +136,6 @@ def handle_from_api(args: argparse.Namespace) -> None:
         if not args.api_json_path:
             raise SystemExit("--api-json-path is required in 'use' mode")
         payload = load_payload(args.api_json_path)
-        # If payload is a string (path), load it; otherwise expect dict
-        if isinstance(payload, str):
-            with open(payload, "r") as fh:
-                payload = json.load(fh)
         graph = payload_to_graph(payload)
         apply_category_colors(graph, DEFAULT_COLORS)
         apply_styling(graph)

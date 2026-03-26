@@ -71,7 +71,7 @@ def main() -> None:
         render_cmd = [
             "python",
             "-m",
-            "cardviz.cli",
+            "cli",
             "from-api-json",
             "--api-mode",
             "use",
