@@ -106,11 +106,12 @@ def add_variants(card_json: str, aro: str, graph: nx.MultiDiGraph) -> None:
             continue
 
         variant_root = "SNPs"
+        param_desc = entry.get("model_param", {}).get("snp", {}).get("param_description", "")
         graph.add_node(
             variant_root,
             name="SNPs",
             label="SNPs",
-            title=entry.get("model_description", ""),
+            title=param_desc,
             group="card",
             sources=["card.json"],
         )
