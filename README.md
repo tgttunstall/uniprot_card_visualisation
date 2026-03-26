@@ -86,6 +86,8 @@ Add `--trace` to emit a `trace_<ACC>.csv` debug table per accession. Default out
 
 Defaults target `/home/tunstall/amr` bulk files and write to `~/card_output/card_subgraph_<ACC>.json`; override paths via flags as needed.
 
+CLI entrypoint: `python src/cli.py ...` (you can also do `PYTHONPATH=./src python -m cli ...`).
+
 ## Provenance of code
 - Ported from `~/git/card_analysis/common_functions.py`: mapping lookup, CARD subgraph extraction (aro.obo), category colouring (aro_categories.tsv), antibiotic highlighting via `confers_resistance_to_antibiotic`, and variant/SNP enrichment from `card.json`.
 - New in this repo: API-style payload conversion (`api_payload.py`), PyVis/PNG rendering with bundled options (`visualize.py`), CLI glue (`cardviz/cli.py` + top-level `cli.py`), trace export (`trace_utils.py`), and label/title wrapping/styling helpers in `graph_builder.py` for readability.
