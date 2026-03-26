@@ -52,6 +52,10 @@ def main() -> None:
 
     payload = load_payload(subgraph_path)
     graph = payload_to_graph(payload)
+    # Ensure UniProt node is coloured/tagged, even if raw JSON stripped styling
+    if args.accession in graph.nodes:
+        graph.nodes[args.accession]["color"] = DEFAULT_COLORS.get("uniprot", "red")
+        graph.nodes[args.accession]["group"] = "uniprot"
     apply_category_colors(graph, DEFAULT_COLORS)
     apply_styling(graph)
 
