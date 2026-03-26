@@ -34,12 +34,15 @@ def apply_category_colors(graph, colors):
             graph.nodes[nid]["group"] = data.get("group", "card")
         graph.nodes[nid].setdefault("font_color", "white")
         if not graph.nodes[nid].get("title"):
-            graph.nodes[nid]["title"] = graph.nodes[nid].get("def", "")
+            graph.nodes[nid]["title"] = f"{nid}: {graph.nodes[nid].get('name', nid)}; {graph.nodes[nid].get('def', '')}"
 
 
 def _raw_payload(graph) -> dict:
     nodes = []
     for nid, data in graph.nodes(data=True):
+        title = data.get("title")
+        if not title:
+            title = f"{nid}: {data.get('name', nid)}; {data.get('def', '')}"
         nodes.append(
             {
                 "id": nid,
@@ -48,7 +51,7 @@ def _raw_payload(graph) -> dict:
                 "def": data.get("def", ""),
                 "category": data.get("category"),
                 "sources": data.get("sources", []),
-                "title": data.get("title", data.get("def", "")),
+                "title": title,
             }
         )
 
