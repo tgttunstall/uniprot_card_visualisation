@@ -82,7 +82,7 @@ def main() -> None:
                 fh.write("")
 
     if args.trace_json:
-        tj_path = os.path.join(args.outdir, f"trace_json_{args.accession}.json")
+        tj_path = os.path.join(args.outdir, f"trace_{args.accession}.json")
         os.makedirs(os.path.dirname(os.path.abspath(tj_path)), exist_ok=True)
         payload = {
             "uniprot": args.accession,
