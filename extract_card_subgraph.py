@@ -134,8 +134,11 @@ def add_variants(card_json: str, aro: str, graph: nx.MultiDiGraph) -> None:
             )
 
 
-def card_graph(accession: str, map_file: str, obo_file: str, card_json: str, categories_file: str) -> Tuple[nx.MultiDiGraph, str]:
-    _, aro = load_mapping(map_file, accession)
+def card_graph(accession: str, map_file: str, obo_file: str, card_json: str, categories_file: str, aro_override: str = None) -> Tuple[nx.MultiDiGraph, str]:
+    if aro_override:
+        aro = aro_override
+    else:
+        _, aro = load_mapping(map_file, accession)
     graph = extract_subgraph(obo_file, aro)
 
     cat_df = pd.read_csv(categories_file, sep="\t")
@@ -209,7 +212,8 @@ def to_payload(graph: nx.MultiDiGraph, aro_root: str, accession: str, include_un
 def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser(description="Extract bare CARD subgraph as JSON")
     p.add_argument("--accession", required=True)
-    p.add_argument("--map-file", required=True)
+    p.add_argument("--aro-root", help="Override ARO root (skip mapping)")
+    p.add_argument("--map-file", help="Mapping TSV (required unless --aro-root provided)")
     p.add_argument("--obo-file", required=True)
     p.add_argument("--card-json", required=True)
     p.add_argument("--categories-file", required=True)
@@ -221,12 +225,17 @@ def parse_args() -> argparse.Namespace:
 def main() -> None:
     args = parse_args()
 
+    aro_override = args.aro_root
+    if not aro_override and not args.map_file:
+        raise SystemExit("--map-file is required unless --aro-root is provided")
+
     graph, aro = card_graph(
         accession=args.accession,
-        map_file=args.map_file,
+        map_file=args.map_file if args.map_file else "",
         obo_file=args.obo_file,
         card_json=args.card_json,
         categories_file=args.categories_file,
+        aro_override=aro_override,
     )
 
     payload = to_payload(graph, aro_root=aro, accession=args.accession, include_uniprot=args.include_uniprot)
