@@ -70,12 +70,10 @@ def main() -> None:
     if args.step in {"render", "both"}:
         render_cmd = [
             "python",
-            "-m",
-            "cli",
-            "from-api-json",
-            "--api-mode",
-            "use",
-            "--api-json-path",
+            os.path.join(ROOT, "run_render_kg.py"),
+            "--accession",
+            args.accession,
+            "--subgraph-json",
             subgraph_path,
             "--outdir",
             args.outdir,
@@ -83,15 +81,11 @@ def main() -> None:
             args.formats,
             "--theme",
             args.theme,
-            "--accession",
-            args.accession,
         ]
 
         print("Running (render):")
         print(" ".join(render_cmd))
-        env = os.environ.copy()
-        env["PYTHONPATH"] = SRC + os.pathsep + env.get("PYTHONPATH", "")
-        subprocess.run(render_cmd, check=True, env=env)
+        subprocess.run(render_cmd, check=True)
 
 
 if __name__ == "__main__":
