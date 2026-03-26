@@ -58,13 +58,33 @@ Add `--trace` to emit a `trace_<ACC>.csv` debug table per accession. Default out
 
 ### Convenience runner
 
-`run_card_kg.py` is a unified runner:
+`run_card_kg.py` is a unified runner (no env vars needed):
 
-- Extract only: `python run_card_kg.py --step extract --accession Q182T3`
-- Render only: `CARD_JSON_PATH=~/card_output/card_subgraph_Q182T3.json python run_card_kg.py --step render`
-- Do both (default): `python run_card_kg.py --accession Q182T3 --include-uniprot`
+- Extract only:
+  ```bash
+  python run_card_kg.py --step extract \
+    --accession Q182T3 \
+    --map-file /home/tunstall/amr/map_tsv/CARD-UniProt-Mapping.tsv \
+    --obo-file /home/tunstall/amr/databases/card/ontology/aro.obo \
+    --card-json /home/tunstall/amr/databases/card/data/card.json \
+    --categories-file /home/tunstall/amr/databases/card/data/aro_categories.tsv \
+    --outdir ~/card_output \
+    --include-uniprot
+  ```
 
-Defaults target `/home/tunstall/amr` bulk files and write to `~/card_output/card_subgraph_<ACC>.json`; override paths/envs as needed.
+- Render only (from an existing subgraph):
+  ```bash
+  python run_card_kg.py --step render \
+    --accession Q182T3 \
+    --subgraph-json ~/card_output/card_subgraph_Q182T3.json \
+    --outdir ~/card_output \
+    --formats pyvis,png \
+    --theme dark
+  ```
+
+- Do both (default step): same as extract + render combined; omit `--step` to run both in sequence.
+
+Defaults target `/home/tunstall/amr` bulk files and write to `~/card_output/card_subgraph_<ACC>.json`; override paths via flags as needed.
 
 ## Provenance of code
 - Ported from `~/git/card_analysis/common_functions.py`: mapping lookup, CARD subgraph extraction (aro.obo), category colouring (aro_categories.tsv), antibiotic highlighting via `confers_resistance_to_antibiotic`, and variant/SNP enrichment from `card.json`.

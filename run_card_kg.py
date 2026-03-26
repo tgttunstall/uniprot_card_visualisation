@@ -6,11 +6,8 @@ Steps:
   extract: uses extract_card_subgraph.py to produce card_subgraph_<ACC>.json
   render:  renders from a given subgraph JSON via cardviz.cli (PyVis/PNG)
 
-Defaults point to local CARD files under /home/tunstall/amr. Override via
-args or env vars:
-  CARD_ACCESSION   (default: Q182T3)
-  CARD_OUTDIR      (default: ~/card_output)
-  CARD_SUBGRAPH    (path to subgraph JSON; default outdir/card_subgraph_<ACC>.json)
+Defaults point to local CARD files under /home/tunstall/amr with no env vars.
+All paths are absolute; output defaults to ~/card_output via os.path.expanduser.
 """
 
 from __future__ import annotations
@@ -30,7 +27,7 @@ if SRC not in sys.path:
 def parse_args():
     p = argparse.ArgumentParser(description="Extract and/or render CARD KG")
     p.add_argument("--step", choices=["extract", "render", "both"], default="both")
-    p.add_argument("--accession", default=os.environ.get("CARD_ACCESSION", "Q182T3"))
+    p.add_argument("--accession", default="Q182T3")
     p.add_argument("--map-file", default="/home/tunstall/amr/map_tsv/CARD-UniProt-Mapping.tsv")
     p.add_argument("--obo-file", default="/home/tunstall/amr/databases/card/ontology/aro.obo")
     p.add_argument("--card-json", default="/home/tunstall/amr/databases/card/data/card.json")
