@@ -17,7 +17,7 @@ DEFAULT_COLORS = {
     "AMR Gene Family": "steelblue",
     "Resistance Mechanism": "deepskyblue",
     "uniprot": "red",
-    "variant": None,
+    "variant": "darkorange",
 }
 
 GENERAL_ARO_NODES = {
@@ -215,12 +215,20 @@ def to_payload(graph: nx.MultiDiGraph, aro_root: str, accession: str, include_un
         graph.add_node(accession, name=accession, label=accession, title=accession, group="uniprot", sources=["input"])
         graph.add_edge(accession, aro_root, label="is")
 
+    def strip_node(data: Dict) -> Dict:
+        cleaned = {}
+        for k, v in data.items():
+            if k in {"color", "group", "font_size", "font_color", "size"}:
+                continue
+            cleaned[k] = v
+        return cleaned
+
     nodes = []
     for nid, data in graph.nodes(data=True):
-        nodes.append({"id": nid, **{k: v for k, v in data.items()}})
+        nodes.append({"id": nid, **strip_node(data)})
 
     edges = []
     for src, tgt, data in graph.edges(data=True):
-        edges.append({"source": src, "target": tgt, **{k: v for k, v in data.items()}})
+        edges.append({"source": src, "target": tgt, "label": data.get("label", ""), "title": data.get("title", "")})
 
     return {"uniprot": accession, "aro_root": aro_root, "nodes": nodes, "edges": edges}
