@@ -30,7 +30,7 @@ def parse_args():
     p.add_argument("--categories-file", default="/home/tunstall/amr/databases/card/data/aro_categories.tsv")
     p.add_argument("--outdir", default=os.path.join(os.path.expanduser("~"), "card_output"))
     p.add_argument("--aro-root", help="Override ARO root (skip mapping)")
-    p.add_argument("--include-uniprot", action="store_true", help="Include UniProt node and edge")
+    p.add_argument("--include-uniprot", action="store_true", help="Include UniProt node and edge (default: off; pass flag to enable)")
     p.add_argument("--verbose", action="store_true", help="Print inputs")
     return p.parse_args()
 
@@ -63,7 +63,7 @@ def main() -> None:
         aro_override=args.aro_root,
     )
 
-    payload = to_payload(graph, aro_root=aro, accession=args.accession, include_uniprot=args.include_uniprot)
+    payload = to_payload(graph, aro_root=aro, accession=args.accession, include_uniprot=True)
 
     with open(out_path, "w") as fh:
         json.dump(payload, fh, indent=2)
