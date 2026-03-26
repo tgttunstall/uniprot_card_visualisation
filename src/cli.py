@@ -4,22 +4,25 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import sys
 from typing import List, Set
 
-from card_vis_functions import (
-    DEFAULT_COLORS,
+BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if BASE not in sys.path:
+    sys.path.insert(0, BASE)
+
+from card_vis_extract import DEFAULT_COLORS, attach_uniprot_node, build_card_graph, to_payload  # noqa: E402
+from card_vis_render import (
     apply_category_colors,
     apply_styling,
-    attach_uniprot_node,
-    build_card_graph,
-    graph_to_api_payload,
     load_payload,
     payload_to_graph,
     render_png,
     render_pyvis,
-    save_payload,
     trace_graph,
-)
+    graph_to_api_payload,
+    save_payload,
+)  # noqa: E402
 
 
 def parse_accessions(args: argparse.Namespace) -> List[str]:
