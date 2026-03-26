@@ -17,13 +17,7 @@ DEFAULT_COLORS = {
     "AMR Gene Family": "steelblue",
     "Resistance Mechanism": "deepskyblue",
     "uniprot": "red",
-    "variant": "darkorange",
-}
-
-EDGE_COLORS = {
-    "is_a": {"color": "olive", "font_color": "olivedrab"},
-    "confers_resistance_to_antibiotic": {"color": "firebrick", "font_color": "indianred"},
-    "confers_resistance_to_drug_class": {"color": "firebrick", "font_color": "indianred"},
+    "variant": None,
 }
 
 GENERAL_ARO_NODES = {

@@ -8,6 +8,7 @@ same outdir. No env vars required.
 from __future__ import annotations
 
 import argparse
+import csv
 import os
 import sys
 
@@ -55,8 +56,28 @@ def main() -> None:
     if "pyvis" in formats:
         render_pyvis(graph, html_file=html_file, theme=args.theme)
     if args.trace:
-        df = trace_graph(graph, accession=args.accession)
-        df.to_csv(os.path.join(args.outdir, f"trace_{args.accession}.csv"), index=False)
+        rows = trace_graph(graph, accession=args.accession)
+        trace_path = os.path.join(args.outdir, f"trace_{args.accession}.csv")
+        os.makedirs(os.path.dirname(os.path.abspath(trace_path)), exist_ok=True)
+        if rows:
+            fieldnames = [
+                "UniProtKB",
+                "ARO",
+                "Name",
+                "Category",
+                "Source",
+                "Color",
+                "Edge Targets (ARO)",
+                "Edge Labels",
+                "Target Names",
+            ]
+            with open(trace_path, "w", newline="") as fh:
+                writer = csv.DictWriter(fh, fieldnames=fieldnames)
+                writer.writeheader()
+                writer.writerows(rows)
+        else:
+            with open(trace_path, "w") as fh:
+                fh.write("")
 
     print(f"Rendered to {html_file}")
 
