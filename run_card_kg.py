@@ -79,7 +79,10 @@ def main() -> None:
 
     print("Running (render):")
     print(" ".join(render_cmd))
-    subprocess.run(render_cmd, check=True)
+
+    env = os.environ.copy()
+    env["PYTHONPATH"] = SRC + os.pathsep + env.get("PYTHONPATH", "")
+    subprocess.run(render_cmd, check=True, env=env)
 
 
 if __name__ == "__main__":
