@@ -7,10 +7,15 @@ from typing import Dict
 
 import networkx as nx
 
-try:
-    from card_vis_extract import DEFAULT_COLORS
-except ImportError:
-    from .card_vis_extract import DEFAULT_COLORS
+DEFAULT_COLORS = {
+    "card": "blue",
+    "Antibiotic": "rebeccapurple",
+    "Drug Class": "mediumorchid",
+    "AMR Gene Family": "steelblue",
+    "Resistance Mechanism": "deepskyblue",
+    "uniprot": "red",
+    "variant": "darkorange",
+}
 
 EDGE_COLORS = {
     "is_a": {"color": "olive", "font_color": "olivedrab"},

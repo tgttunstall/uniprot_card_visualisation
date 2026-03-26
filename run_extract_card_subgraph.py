@@ -18,7 +18,7 @@ SRC = os.path.join(ROOT, "src")
 if SRC not in sys.path:
     sys.path.insert(0, SRC)
 
-from card_vis_extract import build_card_graph, to_payload, DEFAULT_COLORS  # noqa: E402
+from card_vis_extract import build_card_graph, to_payload  # noqa: E402
 
 
 def parse_args():
@@ -59,7 +59,6 @@ def main() -> None:
         obo_file=args.obo_file,
         card_json=args.card_json,
         categories_file=args.categories_file,
-        colors=DEFAULT_COLORS,
         aro_override=args.aro_root,
     )
 
