@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import Dict, Iterable, List, Optional, Tuple
 
 import json
+import os
 
 import obonet
 import pandas as pd
@@ -26,7 +27,7 @@ def _pick_column(df: pd.DataFrame, candidates: Iterable[str]) -> Optional[str]:
     return None
 
 
-def _load_mapping(map_file: Path, accession: str) -> Tuple[str, str]:
+def _load_mapping(map_file: str, accession: str) -> Tuple[str, str]:
     df = pd.read_csv(map_file, sep="\t")
 
     acc_col = _pick_column(df, ["UPKB", "UniProtKB_acc", "UniProtKB", "acc", "ACCESSION"])
@@ -46,7 +47,7 @@ def _load_mapping(map_file: Path, accession: str) -> Tuple[str, str]:
     return str(acc_col), aro
 
 
-def _extract_subgraph(obo_path: Path, aro: str) -> nx.MultiDiGraph:
+def _extract_subgraph(obo_path: str, aro: str) -> nx.MultiDiGraph:
     obo_graph: nx.MultiDiGraph = obonet.read_obo(obo_path)
     if aro not in obo_graph:
         raise ValueError(f"ARO {aro} not found in {obo_path}")
@@ -72,7 +73,7 @@ def _label_from_synonym(synonym_list: Optional[List[str]]) -> Optional[str]:
     return None
 
 
-def _add_variants(card_json: Path, aro: str, graph: nx.MultiDiGraph, colors: Dict[str, str]) -> None:
+def _add_variants(card_json: str, aro: str, graph: nx.MultiDiGraph, colors: Dict[str, str]) -> None:
     with open(card_json, "r") as fh:
         data = json.load(fh)
 
@@ -118,10 +119,10 @@ def _add_variants(card_json: Path, aro: str, graph: nx.MultiDiGraph, colors: Dic
 
 def build_card_graph(
     accession: str,
-    map_file: Path,
-    obo_file: Path,
-    card_json: Path,
-    categories_file: Path,
+    map_file: str,
+    obo_file: str,
+    card_json: str,
+    categories_file: str,
     colors: Dict[str, str],
     remove_general: bool = True,
 ) -> Tuple[nx.MultiDiGraph, str]:

@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 import json
-from pathlib import Path
-from typing import Dict, List
+import os
+from typing import Dict
 
 import networkx as nx
 
@@ -62,12 +62,12 @@ def payload_to_graph(payload: Dict) -> nx.MultiDiGraph:
     return G
 
 
-def save_payload(payload: Dict, path: Path) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
+def save_payload(payload: Dict, path: str) -> None:
+    os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
     with open(path, "w") as fh:
         json.dump(payload, fh, indent=2)
 
 
-def load_payload(path: Path) -> Dict:
+def load_payload(path: str) -> Dict:
     with open(path, "r") as fh:
         return json.load(fh)

@@ -14,40 +14,39 @@ from __future__ import annotations
 
 import os
 import subprocess
-from pathlib import Path
 
 
-ROOT = Path(__file__).resolve().parent
+ROOT = os.path.dirname(os.path.abspath(__file__))
 
 # Default inputs (edit if your paths differ)
-MAP_FILE = Path("/home/tunstall/amr/map_tsv/CARD-UniProt-Mapping.tsv")
-OBO_FILE = Path("/home/tunstall/amr/databases/card/ontology/aro.obo")
-CARD_JSON = Path("/home/tunstall/amr/databases/card/data/card.json")
-CATEGORIES = Path("/home/tunstall/amr/databases/card/data/aro_categories.tsv")
+MAP_FILE = "/home/tunstall/amr/map_tsv/CARD-UniProt-Mapping.tsv"
+OBO_FILE = "/home/tunstall/amr/databases/card/ontology/aro.obo"
+CARD_JSON = "/home/tunstall/amr/databases/card/data/card.json"
+CATEGORIES = "/home/tunstall/amr/databases/card/data/aro_categories.tsv"
 
 ACCESSION = os.environ.get("CARD_ACCESSION", "Q182T3")
-OUTDIR = Path(os.environ.get("CARD_OUTDIR", str(Path.home() / "card_output"))).expanduser()
+OUTDIR = os.path.expanduser(os.environ.get("CARD_OUTDIR", os.path.join(os.path.expanduser("~"), "card_output")))
 
 
 def main() -> None:
     cmd = [
         "python",
-        str(ROOT / "cli.py"),
+        os.path.join(ROOT, "cli.py"),
         "from-api-json",
         "--api-mode",
         "create",
         "--accession",
         ACCESSION,
         "--map-file",
-        str(MAP_FILE),
+        MAP_FILE,
         "--obo-file",
-        str(OBO_FILE),
+        OBO_FILE,
         "--card-json",
-        str(CARD_JSON),
+        CARD_JSON,
         "--categories-file",
-        str(CATEGORIES),
+        CATEGORIES,
         "--outdir",
-        str(OUTDIR),
+        OUTDIR,
         "--formats",
         "pyvis,png",
         "--theme",

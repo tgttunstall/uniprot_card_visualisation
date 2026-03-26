@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import argparse
-from pathlib import Path
+import os
 from typing import List, Set
 
 from cardviz.graph_builder import build_card_graph, attach_uniprot_node, apply_styling
@@ -25,41 +25,41 @@ def parse_accessions(args: argparse.Namespace) -> List[str]:
     if args.accession:
         accs.update(args.accession)
     if args.accessions_file:
-        for line in Path(args.accessions_file).read_text().splitlines():
-            line = line.strip()
-            if line and not line.startswith("#"):
-                accs.add(line)
+        with open(args.accessions_file) as fh:
+            for line in fh:
+                line = line.strip()
+                if line and not line.startswith("#"):
+                    accs.add(line)
     if not accs:
         raise SystemExit("No accessions provided")
     return sorted(accs)
 
 
-def ensure_outdir(path: Path) -> Path:
-    path = path.expanduser()
-    path.mkdir(parents=True, exist_ok=True)
+def ensure_outdir(path: str) -> str:
+    path = os.path.expanduser(path)
+    os.makedirs(path, exist_ok=True)
     return path
 
 
 def handle_from_local(args: argparse.Namespace) -> None:
-    outdir = ensure_outdir(Path(args.outdir))
+    outdir = ensure_outdir(args.outdir)
     accs = parse_accessions(args)
     formats = {fmt.strip() for fmt in args.formats.split(',') if fmt.strip()}
 
     for acc in accs:
         graph, aro = build_card_graph(
             accession=acc,
-            map_file=Path(args.map_file),
-            obo_file=Path(args.obo_file),
-            card_json=Path(args.card_json),
-            categories_file=Path(args.categories_file),
+            map_file=args.map_file,
+            obo_file=args.obo_file,
+            card_json=args.card_json,
+            categories_file=args.categories_file,
             colors=DEFAULT_COLORS,
         )
         graph = attach_uniprot_node(graph, acc, aro, DEFAULT_COLORS)
         apply_styling(graph)
 
-        stem = acc
-        html_file = outdir / f"{stem}.html"
-        png_file = outdir / f"{stem}.png"
+        html_file = os.path.join(outdir, f"{acc}.html")
+        png_file = os.path.join(outdir, f"{acc}.png")
 
         if "pyvis" in formats:
             render_pyvis(graph, html_file=html_file, theme=args.theme)
@@ -68,11 +68,11 @@ def handle_from_local(args: argparse.Namespace) -> None:
 
         if args.trace:
             df = trace_graph(graph, accession=acc)
-            df.to_csv(outdir / f"trace_{stem}.csv", index=False)
+            df.to_csv(os.path.join(outdir, f"trace_{acc}.csv"), index=False)
 
 
 def handle_from_api(args: argparse.Namespace) -> None:
-    outdir = ensure_outdir(Path(args.outdir))
+    outdir = ensure_outdir(args.outdir)
     formats = {fmt.strip() for fmt in args.formats.split(',') if fmt.strip()}
     mode = args.api_mode
 
@@ -81,10 +81,10 @@ def handle_from_api(args: argparse.Namespace) -> None:
         for acc in accs:
             graph, aro = build_card_graph(
                 accession=acc,
-                map_file=Path(args.map_file),
-                obo_file=Path(args.obo_file),
-                card_json=Path(args.card_json),
-                categories_file=Path(args.categories_file),
+                map_file=args.map_file,
+                obo_file=args.obo_file,
+                card_json=args.card_json,
+                categories_file=args.categories_file,
                 colors=DEFAULT_COLORS,
             )
             graph = attach_uniprot_node(graph, acc, aro, DEFAULT_COLORS)
@@ -92,35 +92,35 @@ def handle_from_api(args: argparse.Namespace) -> None:
 
             payload = graph_to_api_payload(acc, aro, graph, legend=DEFAULT_COLORS)
             api_name = args.api_json_name or f"card_api_mock_{acc}.json"
-            save_payload(payload, outdir / api_name)
+            save_payload(payload, os.path.join(outdir, api_name))
 
-            html_file = outdir / f"{acc}.html"
-            png_file = outdir / f"{acc}.png"
+            html_file = os.path.join(outdir, f"{acc}.html")
+            png_file = os.path.join(outdir, f"{acc}.png")
             if "pyvis" in formats:
                 render_pyvis(graph, html_file=html_file, theme=args.theme)
             if "png" in formats:
                 render_png(graph, png_file=png_file)
             if args.trace:
                 df = trace_graph(graph, accession=acc)
-                df.to_csv(outdir / f"trace_{acc}.csv", index=False)
+                df.to_csv(os.path.join(outdir, f"trace_{acc}.csv"), index=False)
 
     elif mode == "use":
         if not args.api_json_path:
             raise SystemExit("--api-json-path is required in 'use' mode")
-        payload = load_payload(Path(args.api_json_path))
+        payload = load_payload(args.api_json_path)
         graph = payload_to_graph(payload)
         apply_styling(graph)
 
         acc = payload.get("uniprot", {}).get("id", args.accession[0] if args.accession else "graph")
-        html_file = outdir / f"{acc}.html"
-        png_file = outdir / f"{acc}.png"
+        html_file = os.path.join(outdir, f"{acc}.html")
+        png_file = os.path.join(outdir, f"{acc}.png")
         if "pyvis" in formats:
             render_pyvis(graph, html_file=html_file, theme=args.theme)
         if "png" in formats:
             render_png(graph, png_file=png_file)
         if args.trace:
             df = trace_graph(graph, accession=acc)
-            df.to_csv(outdir / f"trace_{acc}.csv", index=False)
+            df.to_csv(os.path.join(outdir, f"trace_{acc}.csv"), index=False)
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -130,7 +130,7 @@ def build_parser() -> argparse.ArgumentParser:
     common = argparse.ArgumentParser(add_help=False)
     common.add_argument("--accession", action="append", help="UniProt accession (repeatable)")
     common.add_argument("--accessions-file", help="File with UniProt accessions (one per line)")
-    common.add_argument("--outdir", default=str(Path.home() / "card_output"), help="Output directory (default: ~/card_output)")
+    common.add_argument("--outdir", default=os.path.join(os.path.expanduser("~"), "card_output"), help="Output directory (default: ~/card_output)")
     common.add_argument("--formats", default="pyvis,png", help="Comma list: pyvis,png (default: pyvis,png)")
     common.add_argument("--theme", choices=["dark", "light"], default="dark", help="Visualisation theme")
     common.add_argument("--trace", action="store_true", help="Write trace CSV")

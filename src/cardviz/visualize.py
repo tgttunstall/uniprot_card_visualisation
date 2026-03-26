@@ -1,8 +1,6 @@
 from __future__ import annotations
 
-from pathlib import Path
-from typing import Iterable
-
+import os
 import networkx as nx
 from pyvis.network import Network
 
@@ -13,7 +11,7 @@ def _pyvis_colors(theme: str) -> dict:
     return {"bg": "#222222", "font": "#ffffff", "edge": "#aaaaaa"}
 
 
-def render_pyvis(graph: nx.MultiDiGraph, html_file: Path, theme: str = "dark") -> None:
+def render_pyvis(graph: nx.MultiDiGraph, html_file: str, theme: str = "dark") -> None:
     theme_cfg = _pyvis_colors(theme)
     net = Network(notebook=False, height="1200px", width="100%", bgcolor=theme_cfg["bg"], font_color=theme_cfg["font"])
 
@@ -86,15 +84,15 @@ def render_pyvis(graph: nx.MultiDiGraph, html_file: Path, theme: str = "dark") -
                 "multi": True,
             }
 
-    html_file.parent.mkdir(parents=True, exist_ok=True)
+    os.makedirs(os.path.dirname(os.path.abspath(html_file)), exist_ok=True)
     net.save_graph(str(html_file))
 
 
-def render_png(graph: nx.MultiDiGraph, png_file: Path, layout: str = "spring") -> None:
+def render_png(graph: nx.MultiDiGraph, png_file: str, layout: str = "spring") -> None:
     import matplotlib.pyplot as plt
     import numpy as np
 
-    png_file.parent.mkdir(parents=True, exist_ok=True)
+    os.makedirs(os.path.dirname(os.path.abspath(png_file)), exist_ok=True)
 
     # Layout
     if layout == "spring":
