@@ -151,9 +151,12 @@ def render_pyvis(graph: nx.MultiDiGraph, html_file: str, theme: str = "dark") ->
         gid = node["id"]
         if gid in graph.nodes:
             node["color"] = graph.nodes[gid].get("color")
+            font_color = graph.nodes[gid].get("font_color", theme_cfg["font"])
+            if theme == "light" and str(font_color).lower() in {"white", "#ffffff", "#fff"}:
+                font_color = theme_cfg["font"]
             node["font"] = {
                 "size": graph.nodes[gid].get("font_size", 16),
-                "color": graph.nodes[gid].get("font_color", theme_cfg["font"]),
+                "color": font_color,
                 "multi": True,
             }
 

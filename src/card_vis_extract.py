@@ -17,6 +17,7 @@ DEFAULT_COLORS = {
     "AMR Gene Family": "steelblue",
     "Resistance Mechanism": "deepskyblue",
     "uniprot": "red",
+    "variant": "darkorange",
 }
 
 GENERAL_ARO_NODES = {
@@ -90,13 +91,14 @@ def add_variants(card_json: str, aro: str, graph: nx.MultiDiGraph, colors: Dict[
 
         variant_root = "SNPs"
         param_desc = entry.get("model_param", {}).get("snp", {}).get("param_description", "")
+        variant_color = colors.get("variant", colors.get("card", "blue"))
         graph.add_node(
             variant_root,
             name="SNPs",
             label="SNPs",
             title=param_desc,
             group="card",
-            color=colors.get("card", "blue"),
+            color=variant_color,
             sources=["card.json"],
             category="variant",
         )
@@ -110,7 +112,7 @@ def add_variants(card_json: str, aro: str, graph: nx.MultiDiGraph, colors: Dict[
                 label=snp,
                 title=snp,
                 group="card",
-                color=colors.get("card", "blue"),
+                color=variant_color,
                 sources=["card.json"],
                 category="variant",
             )
