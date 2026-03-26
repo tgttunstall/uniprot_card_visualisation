@@ -95,10 +95,12 @@ def label_from_synonym(synonym_list):
 def add_variants(card_json: str, aro: str, graph: nx.MultiDiGraph) -> None:
     with open(card_json, "r") as fh:
         data = json.load(fh)
+    aro_no_prefix = aro.split(":")[-1]
     for entry in data.values():
         if not isinstance(entry, dict):
             continue
-        if str(entry.get("ARO_accession")) != aro:
+        acc_val = str(entry.get("ARO_accession"))
+        if acc_val not in {aro, aro_no_prefix}:
             continue
         if entry.get("model_type") != "protein variant model":
             continue
