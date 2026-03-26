@@ -6,12 +6,17 @@ import os
 from typing import Dict
 
 import networkx as nx
-import pandas as pd
 
 try:
     from card_vis_extract import DEFAULT_COLORS
 except ImportError:
     from .card_vis_extract import DEFAULT_COLORS
+
+EDGE_COLORS = {
+    "is_a": {"color": "olive", "font_color": "olivedrab"},
+    "confers_resistance_to_antibiotic": {"color": "firebrick", "font_color": "indianred"},
+    "confers_resistance_to_drug_class": {"color": "firebrick", "font_color": "indianred"},
+}
 
 
 def apply_category_colors(graph: nx.MultiDiGraph, colors: Dict[str, str] = DEFAULT_COLORS) -> None:
@@ -58,17 +63,9 @@ def apply_styling(graph: nx.MultiDiGraph) -> None:
         data["font_size"] = 18
         data["font_face"] = "arial"
         data["font_color"] = "gray"
-        if data.get("label") == "is_a":
-            data["color"] = "olive"
-            data["font_color"] = "olivedrab"
-        elif data.get("label") and "confers_resistance_to" in data["label"]:
-            data["color"] = "firebrick"
-            data["font_color"] = "indianred"
-
-
-def load_payload(path: str) -> Dict:
-    with open(path, "r") as fh:
-        return json.load(fh)
+        lbl = data.get("label")
+        if lbl in EDGE_COLORS:
+            data.update(EDGE_COLORS[lbl])
 
 
 def payload_to_graph(payload: Dict) -> nx.MultiDiGraph:
@@ -82,6 +79,11 @@ def payload_to_graph(payload: Dict) -> nx.MultiDiGraph:
         G.add_edge(edge["source"], edge["target"], **{k: v for k, v in edge.items() if k not in {"source", "target"}})
 
     return G
+
+
+def load_payload(path: str) -> Dict:
+    with open(path, "r") as fh:
+        return json.load(fh)
 
 
 def render_pyvis(graph: nx.MultiDiGraph, html_file: str, theme: str = "dark") -> None:
@@ -164,55 +166,7 @@ def render_pyvis(graph: nx.MultiDiGraph, html_file: str, theme: str = "dark") ->
     net.save_graph(str(html_file))
 
 
-def render_png(graph: nx.MultiDiGraph, png_file: str, layout: str = "spring") -> None:
-    raise RuntimeError("PNG rendering is disabled; use pyvis HTML output")
-    import matplotlib.pyplot as plt
-    import numpy as np
-
-    os.makedirs(os.path.dirname(os.path.abspath(png_file)), exist_ok=True)
-
-    if layout == "spring":
-        k_value = 1 / max(1, np.sqrt(len(graph.nodes())))
-        pos = nx.spring_layout(graph, k=k_value, iterations=500, seed=42)
-    elif layout == "circular":
-        pos = nx.circular_layout(graph)
-    elif layout == "kamada_kawai":
-        pos = nx.kamada_kawai_layout(graph)
-    else:
-        pos = nx.spring_layout(graph, k=1 / max(1, np.sqrt(len(graph.nodes()))), iterations=500, seed=42)
-
-    node_colors = [graph.nodes[n].get("color", "#1f78b4") for n in graph.nodes()]
-    node_sizes = [graph.nodes[n].get("size", 20) * 4 for n in graph.nodes()]
-    node_labels = {n: graph.nodes[n].get("label", n) for n in graph.nodes()}
-    node_font_sizes = {n: graph.nodes[n].get("font_size", 16) for n in graph.nodes()}
-
-    edge_colors = [graph.edges[e].get("color", "#999999") for e in graph.edges(keys=True)]
-    edge_widths = [graph.edges[e].get("width", 1.5) for e in graph.edges(keys=True)]
-    edge_labels = {(u, v): d.get("label", "") for u, v, d in graph.edges(data=True)}
-
-    plt.figure(figsize=(16, 16), dpi=150)
-    nx.draw(
-        graph,
-        pos,
-        with_labels=False,
-        node_size=node_sizes,
-        node_color=node_colors,
-        edge_color=edge_colors,
-        width=edge_widths,
-        alpha=0.9,
-    )
-
-    for node, (x, y) in pos.items():
-        plt.text(x, y, s=node_labels[node], fontsize=node_font_sizes[node], ha="center", va="center", color="white")
-
-    nx.draw_networkx_edge_labels(graph, pos, edge_labels=edge_labels, font_color="gray", font_size=10, bbox=dict(alpha=0))
-
-    plt.axis("off")
-    plt.savefig(png_file, format="PNG", facecolor="white")
-    plt.close()
-
-
-def trace_graph(graph: nx.MultiDiGraph, accession: str) -> pd.DataFrame:
+def trace_graph(graph: nx.MultiDiGraph, accession: str):
     rows = []
     for node, data in graph.nodes(data=True):
         edges = list(graph.edges(node, keys=True, data=True))
@@ -234,4 +188,4 @@ def trace_graph(graph: nx.MultiDiGraph, accession: str) -> pd.DataFrame:
             }
         )
 
-    return pd.DataFrame(rows)
+    return rows

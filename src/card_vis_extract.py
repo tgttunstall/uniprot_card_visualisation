@@ -20,6 +20,12 @@ DEFAULT_COLORS = {
     "variant": "darkorange",
 }
 
+EDGE_COLORS = {
+    "is_a": {"color": "olive", "font_color": "olivedrab"},
+    "confers_resistance_to_antibiotic": {"color": "firebrick", "font_color": "indianred"},
+    "confers_resistance_to_drug_class": {"color": "firebrick", "font_color": "indianred"},
+}
+
 GENERAL_ARO_NODES = {
     "ARO:1000001",
     "ARO:1000002",
