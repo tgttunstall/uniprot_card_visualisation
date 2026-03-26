@@ -18,7 +18,7 @@ SRC = os.path.join(ROOT, "src")
 if SRC not in sys.path:
     sys.path.insert(0, SRC)
 
-from card_vis_functions import card_graph, to_payload, DEFAULT_COLORS  # noqa: E402
+from card_vis_extract import card_graph, to_payload, DEFAULT_COLORS  # noqa: E402
 
 
 def parse_args():

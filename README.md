@@ -25,7 +25,7 @@ python -m cli from-local \
   --card-json /home/tunstall/amr/databases/card/data/card.json \
   --categories-file /home/tunstall/amr/databases/card/data/aro_categories.tsv \
   --outdir ~/card_output \
-  --formats pyvis,png \
+  --formats pyvis \
   --theme dark
 ```
 
@@ -54,7 +54,7 @@ python -m cli from-api-json \
   --formats pyvis
 ```
 
-Add `--trace` to emit a `trace_<ACC>.csv` debug table per accession. Default output directory is `~/card_output` and is created if missing. Themes: `dark` (default) or `light`. Formats: `pyvis` (HTML, interactive) and optional `png` snapshot.
+Add `--trace` to emit a `trace_<ACC>.csv` debug table per accession. Default output directory is `~/card_output` and is created if missing. Themes: `dark` (default) or `light`. Format: `pyvis` (HTML, interactive).
 
 ### Convenience runner
 
@@ -78,8 +78,8 @@ Add `--trace` to emit a `trace_<ACC>.csv` debug table per accession. Default out
     --accession Q182T3 \
     --subgraph-json ~/card_output/card_subgraph_Q182T3.json \
     --outdir ~/card_output \
-    --formats pyvis,png \
-    --theme dark
+  --formats pyvis \
+  --theme dark
   ```
 
 - Do both (default step): same as extract + render combined; omit `--step` to run both in sequence.
