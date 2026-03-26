@@ -58,22 +58,22 @@ Add `--trace` to emit a `trace_<ACC>.csv` debug table per accession. Default out
 
 ### Convenience runner
 
-`run_card_kg.py` now only extracts the bare subgraph JSON (defaults to Q182T3) using local CARD files under `/home/tunstall/amr`. Override with env vars:
+`run_extract_card_subgraph.py` extracts the bare subgraph JSON (defaults to Q182T3) using local CARD files under `/home/tunstall/amr`. Override with env vars:
 
 ```bash
 export CARD_ACCESSION=Q182T3
 export CARD_OUTDIR=~/card_output
-python run_card_kg.py
+python run_extract_card_subgraph.py
 ```
 
 This produces `card_subgraph_<ACC>.json` in `CARD_OUTDIR`.
 
-To render from an extracted JSON, use `render_card_kg.py` (assumes the JSON path):
+To render from an extracted JSON, use `run_render_card_kg.py` (assumes the JSON path):
 
 ```bash
 export CARD_JSON_PATH=~/card_output/card_subgraph_Q182T3.json
 export CARD_OUTDIR=~/card_output
-python render_card_kg.py
+python run_render_card_kg.py
 ```
 
 This produces `<ACC>.html` (PyVis) and `<ACC>.png` in `CARD_OUTDIR`.
