@@ -21,6 +21,22 @@ DEFAULT_COLORS = {
 }
 
 
+def apply_category_colors(graph, colors):
+    for nid, data in graph.nodes(data=True):
+        if data.get("color"):
+            continue
+        cat = data.get("category") or data.get("group")
+        if cat in colors:
+            graph.nodes[nid]["color"] = colors[cat]
+            graph.nodes[nid]["group"] = cat
+        else:
+            graph.nodes[nid]["color"] = colors.get("card", "blue")
+            graph.nodes[nid]["group"] = data.get("group", "card")
+        graph.nodes[nid].setdefault("font_color", "white")
+        if not graph.nodes[nid].get("title"):
+            graph.nodes[nid]["title"] = graph.nodes[nid].get("def", "")
+
+
 def _raw_payload(graph) -> dict:
     nodes = []
     for nid, data in graph.nodes(data=True):
@@ -32,6 +48,7 @@ def _raw_payload(graph) -> dict:
                 "def": data.get("def", ""),
                 "category": data.get("category"),
                 "sources": data.get("sources", []),
+                "title": data.get("title", data.get("def", "")),
             }
         )
 
@@ -142,6 +159,7 @@ def handle_from_api(args: argparse.Namespace) -> None:
             raise SystemExit("--api-json-path is required in 'use' mode")
         payload = load_payload(args.api_json_path)
         graph = payload_to_graph(payload)
+        apply_category_colors(graph, DEFAULT_COLORS)
         apply_styling(graph)
 
         acc = payload.get("uniprot", {}).get("id", args.accession[0] if args.accession else "graph")
