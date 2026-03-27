@@ -1,9 +1,9 @@
 # UniProt CARD Visualisation
 
-Lightweight CLI to build interactive CARD knowledge graphs for UniProt accessions. Two modes:
+Lightweight Python scripts to build and render interactive CARD knowledge graphs for UniProt accessions. Two steps:
 
-- `from-local`: build directly from CARD flat files.
-- `from-api-json`: either generate a mock API JSON (`create`) or render from an existing API-style JSON (`use`).
+1) Extract a CARD subgraph to JSON: `run_extract_card_subgraph.py`
+2) Render that JSON to an interactive PyVis HTML (optionally a trace CSV/JSON): `run_render_kg.py`
 
 ## Quick start
 
@@ -15,83 +15,39 @@ source ~/myenvs/cardvis_env/bin/activate
 pip install -r cardvis_env_requirements.txt
 ```
 
-Run from local CARD files (dark theme, PyVis HTML + PNG):
+### 1) Extract subgraph from local CARD files
 
 ```bash
-python -m cli from-local \
+python run_extract_card_subgraph.py \
   --accession Q182T3 \
   --map-file /home/tunstall/amr/map_tsv/CARD-UniProt-Mapping.tsv \
   --obo-file /home/tunstall/amr/databases/card/ontology/aro.obo \
   --card-json /home/tunstall/amr/databases/card/data/card.json \
   --categories-file /home/tunstall/amr/databases/card/data/aro_categories.tsv \
-  --outdir ~/card_output \
-  --formats pyvis \
-  --theme dark
+  --outdir ~/card_output
 ```
 
-Generate mock API JSON then render from it (light theme example):
+- Uses `networkx` + `obonet` to read the ARO OBO, find descendants for the accession’s ARO, and attach variant/SNP nodes from `card.json`.
+- Writes `~/card_output/card_subgraph_<ACC>.json` (nodes/edges payload; UniProt node is included).
+
+### 2) Render the extracted payload
 
 ```bash
-python -m cli from-api-json \
-  --api-mode create \
+python run_render_kg.py \
   --accession Q182T3 \
-  --map-file /home/tunstall/amr/map_tsv/CARD-UniProt-Mapping.tsv \
-  --obo-file /home/tunstall/amr/databases/card/ontology/aro.obo \
-  --card-json /home/tunstall/amr/databases/card/data/card.json \
-  --categories-file /home/tunstall/amr/databases/card/data/aro_categories.tsv \
+  --subgraph-json ~/card_output/card_subgraph_Q182T3.json \
   --outdir ~/card_output \
   --formats pyvis \
-  --theme light
+  --theme dark \
+  --trace
 ```
 
-Render from an existing API JSON:
+- Re-applies colouring, labels, and sizing for PyVis; outputs `~/card_output/Q182T3.html`.
+- `--trace` writes `trace_<ACC>.csv`; `--trace-json` writes a styled JSON snapshot.
+- Themes: `dark` (default) or `light`. Format: `pyvis` (HTML, interactive).
 
-```bash
-python -m cli from-api-json \
-  --api-mode use \
-  --api-json-path ~/card_output/card_api_mock_Q182T3.json \
-  --outdir ~/card_output \
-  --formats pyvis
-```
-
-Add `--trace` to emit a `trace_<ACC>.csv` debug table per accession. Default output directory is `~/card_output` and is created if missing. Themes: `dark` (default) or `light`. Format: `pyvis` (HTML, interactive).
-
-### Convenience runner
-
-`run_card_kg.py` is a unified runner (no env vars needed):
-
-- Extract only:
-  ```bash
-  python run_card_kg.py --step extract \
-    --accession Q182T3 \
-    --map-file /home/tunstall/amr/map_tsv/CARD-UniProt-Mapping.tsv \
-    --obo-file /home/tunstall/amr/databases/card/ontology/aro.obo \
-    --card-json /home/tunstall/amr/databases/card/data/card.json \
-    --categories-file /home/tunstall/amr/databases/card/data/aro_categories.tsv \
-    --outdir ~/card_output \
-    --include-uniprot
-  ```
-
-- Render only (from an existing subgraph):
-  ```bash
-  python run_card_kg.py --step render \
-    --accession Q182T3 \
-    --subgraph-json ~/card_output/card_subgraph_Q182T3.json \
-    --outdir ~/card_output \
-  --formats pyvis \
-  --theme dark
-  ```
-
-- Do both (default step): same as extract + render combined; omit `--step` to run both in sequence.
-
-Defaults target `/home/tunstall/amr` bulk files and write to `~/card_output/card_subgraph_<ACC>.json`; override paths via flags as needed.
-
-CLI entrypoint: `python src/cli.py ...` (you can also do `PYTHONPATH=./src python -m cli ...`).
-
-Run scripts:
-- Extract: `python run_extract_card_subgraph.py --accession Q182T3 --include-uniprot`
-- Render (PyVis HTML): `python run_render_kg.py --accession Q182T3 --subgraph-json ~/card_output/card_subgraph_Q182T3.json`
+Defaults target `/home/tunstall/amr` bulk files and write to `~/card_output`; override paths via flags as needed.
 
 ## Provenance of code
-- Ported from `~/git/card_analysis/common_functions.py`: mapping lookup, CARD subgraph extraction (aro.obo), category colouring (aro_categories.tsv), antibiotic highlighting via `confers_resistance_to_antibiotic`, and variant/SNP enrichment from `card.json`.
-- New in this repo: API-style payload conversion (`api_payload.py`), PyVis/PNG rendering with bundled options (`visualize.py`), CLI glue (`cardviz/cli.py` + top-level `cli.py`), trace export (`trace_utils.py`), and label/title wrapping/styling helpers in `graph_builder.py` for readability.
+- Core logic in `src/card_vis_extract.py` (mapping lookup, CARD subgraph extraction, variant/SNP enrichment, payload creation).
+- Rendering/styling in `src/card_vis_render.py` (category colouring, label/title wrapping, PyVis rendering, trace export).
