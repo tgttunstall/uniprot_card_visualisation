@@ -20,10 +20,10 @@ pip install -r cardvis_env_requirements.txt
 ```bash
 python run_extract_card_subgraph.py \
   --accession Q182T3 \
-  --map-file /home/tunstall/amr/map_tsv/CARD-UniProt-Mapping.tsv \
-  --obo-file /home/tunstall/amr/databases/card/ontology/aro.obo \
-  --card-json /home/tunstall/amr/databases/card/data/card.json \
-  --categories-file /home/tunstall/amr/databases/card/data/aro_categories.tsv \
+  --map-file ~/amr/map_tsv/CARD-UniProt-Mapping.tsv \
+  --obo-file ~/amr/databases/card/ontology/aro.obo \
+  --card-json ~/amr/databases/card/data/card.json \
+  --categories-file ~/amr/databases/card/data/aro_categories.tsv \
   --outdir ~/card_output
 ```
 
@@ -46,7 +46,7 @@ python run_render_kg.py \
 - `--trace` writes `trace_<ACC>.csv`; `--trace-json` writes a styled JSON snapshot.
 - Themes: `dark` (default) or `light`. Format: `pyvis` (HTML, interactive).
 
-Defaults target `/home/tunstall/amr` bulk files and write to `~/card_output`; override paths via flags as needed.
+Defaults target `~/amr` bulk files and write to `~/card_output`; override paths via flags as needed.
 
 ## Provenance of code
 - Core logic in `src/card_vis_extract.py` (mapping lookup, CARD subgraph extraction, variant/SNP enrichment, payload creation).

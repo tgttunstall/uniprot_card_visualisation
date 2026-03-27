@@ -2,7 +2,7 @@
 """
 Extract a bare CARD subgraph JSON (nodes/edges only) from local bulk files.
 
-Defaults point to /home/tunstall/amr paths and write to ~/card_output.
+Defaults point to ~/amr paths and write to ~/card_output.
 No env vars required; override via CLI flags.
 """
 
@@ -24,10 +24,14 @@ from card_vis_extract import build_card_graph, to_payload  # noqa: E402
 def parse_args():
     p = argparse.ArgumentParser(description="Extract CARD subgraph to JSON")
     p.add_argument("--accession", default="Q182T3", help="UniProt accession")
-    p.add_argument("--map-file", default="/home/tunstall/amr/map_tsv/CARD-UniProt-Mapping.tsv")
-    p.add_argument("--obo-file", default="/home/tunstall/amr/databases/card/ontology/aro.obo")
-    p.add_argument("--card-json", default="/home/tunstall/amr/databases/card/data/card.json")
-    p.add_argument("--categories-file", default="/home/tunstall/amr/databases/card/data/aro_categories.tsv")
+    amr_root = os.path.join(os.path.expanduser("~"), "amr")
+    p.add_argument("--map-file", default=os.path.join(amr_root, "map_tsv", "CARD-UniProt-Mapping.tsv"))
+    p.add_argument("--obo-file", default=os.path.join(amr_root, "databases", "card", "ontology", "aro.obo"))
+    p.add_argument("--card-json", default=os.path.join(amr_root, "databases", "card", "data", "card.json"))
+    p.add_argument(
+        "--categories-file",
+        default=os.path.join(amr_root, "databases", "card", "data", "aro_categories.tsv"),
+    )
     p.add_argument("--outdir", default=os.path.join(os.path.expanduser("~"), "card_output"))
     p.add_argument("--aro-root", help="Override ARO root (skip mapping)")
     p.add_argument("--include-uniprot", action="store_true", help="Include UniProt node and edge (default: off; pass flag to enable)")
