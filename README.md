@@ -51,3 +51,6 @@ Defaults target `~/amr` bulk files and write to `~/card_output`; override paths 
 ## Provenance of code
 - Core logic in `src/card_vis_extract.py` (mapping lookup, CARD subgraph extraction, variant/SNP enrichment, payload creation).
 - Rendering/styling in `src/card_vis_render.py` (category colouring, label/title wrapping, PyVis rendering, trace export).
+
+## TODO
+- Add sample input files and a minimal demo example.
