@@ -169,7 +169,19 @@ It prints progress as it runs, and if rendering fails for a payload, the script 
 demo_html/render_failures.tsv
 ```
 
-**TODO:** In the real CARD/API integration, the frontend should render the graph dynamically from the API JSON response rather than relying on pre-generated static HTML files. The JSON payload should be converted into the frontend graph component's nodes/edges state and rendered in the browser DOM.
+**TODO for real CARD/API integration:**
+
+- [ ] CARD provides an API endpoint that returns the JSON graph payload for a UniProt accession and ARO ID.
+- [ ] The frontend fetches that JSON payload directly from the CARD API.
+- [ ] The frontend converts the JSON `nodes` and `edges` into its graph component state.
+- [ ] The frontend renders the graph dynamically in the browser DOM.
+- [ ] The frontend does not depend on pre-generated static PyVis HTML files from `demo_html/`.
+
+**Outstanding issues / tasks:**
+
+- [ ] CARD to provide the API endpoint for graph payloads.
+- [ ] CARD to provide reciprocal links with UniProt.
+- [ ] Frontend team to help reconfigure/render the graph on the fly using D3, JavaScript, or another frontend graph library.
 
 ## Code Layout
 
