@@ -1,0 +1,127 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1200px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "rebeccapurple", "font": {"color": "#111111", "multi": true, "size": 47}, "group": "Antibiotic", "id": "ARO:3000669", "label": "virginiamycin M1", "shape": "dot", "size": 31, "title": "ARO:3000669: virginiamycin M1; \"Virginiamycin M1 is a streptogramin A antibiotic.\"\n[PMID:15700955]"}, {"color": "rebeccapurple", "font": {"color": "#111111", "multi": true, "size": 47}, "group": "Antibiotic", "id": "ARO:0000046", "label": "lincomycin", "shape": "dot", "size": 31, "title": "ARO:0000046: lincomycin; \"Lincomycin is a lincosamide antibiotic that comes from\nthe actinomyces Streptomyces lincolnensis. It binds to the 23s portion of the 50S\nsubunit of bacterial ribosomes and inhibit early elongation of peptide chain by inhibiting\ntranspeptidase reaction.\" [PMID:10582867, PMID:15135500]"}, {"color": "mediumorchid", "font": {"color": "#111111", "multi": true, "size": 47}, "group": "Drug Class", "id": "ARO:3000034", "label": "nucleoside antibiotic", "shape": "dot", "size": 31, "title": "ARO:3000034: nucleoside antibiotic; \"Nucleoside antibiotics are made of modified\nnucleosides and nucleotides with wide-ranging activities and means of antibacterial\neffects. This drug class includes aminonucleoside antibiotics, which contain an amino\ngroup.\" [PMID:3061990, PMID:18679046]"}, {"color": "blue", "font": {"color": "#111111", "multi": true, "size": 47}, "group": "card", "id": "ARO:3007637", "label": "cplR", "shape": "dot", "size": 31, "title": "ARO:3007637: Clostridioides difficile cplR; \"CplR is an ABC-F ATPase ribosomal protection\nprotein from Clostridioides difficile which confers resistance to pleuromutilins\nand lincosamides. Its resistance to these antibiotics increases in synergy with erythromcyin\nresistance methylases (e.g., ermB).\" [PMID:36951104]"}, {"color": "blue", "font": {"color": "#111111", "multi": true, "size": 47}, "group": "card", "id": "ARO:3004469", "label": "ABC-F ATP-binding cassette ribosomal\nprotection protein", "shape": "dot", "size": 31, "title": "ARO:3004469: ABC-F ATP-binding cassette ribosomal protection protein; \"A subfamily\nof the ATP-binding cassette protein superfamily. Unlike other ABC proteins, ABC-F\ngenes are not fused to a transmembrane domain nor associated with transport. It has\nbeen shown that ABC-F proteins confer antibiotic resistance via ribosomal protection\nand not antibiotic efflux as in other ABC proteins.\" [PMID:29376318, PMID:27006457]"}, {"color": "rebeccapurple", "font": {"color": "#111111", "multi": true, "size": 47}, "group": "Antibiotic", "id": "ARO:3007636", "label": "iboxamycin", "shape": "dot", "size": 31, "title": "ARO:3007636: iboxamycin; \"Iboxamycin is a fully synthetic lincosamide antibiotic.\nLike other lincosamides, it selectively targets the bacterial ribosome and prevents\nelongation of the peptide chain. Iboxamycin has been shown to be effective against\nbacterial strains otherwise resistant to licosamide antibiotics.\" [PMID:34707295]"}, {"color": "mediumorchid", "font": {"color": "#111111", "multi": true, "size": 47}, "group": "Drug Class", "id": "ARO:0000026", "label": "streptogramin antibiotic", "shape": "dot", "size": 31, "title": "ARO:0000026: streptogramin antibiotic; \"Streptogramin antibiotics are natural products\nproduced by various members of the Streptomyces genus. These antibiotics bind to\nthe P site of the 50S subunit of bacterial ribosomes to inhibit protein synthesis.\nThe family consists of two subgroups, type A and type B, which are simultaneously\nproduced by the same bacterial species in a ratio of roughly 70:30.\" [PMID:15700955]"}, {"color": "mediumorchid", "font": {"color": "#111111", "multi": true, "size": 51}, "group": "Drug Class", "id": "ARO:0000017", "label": "lincosamide antibiotic", "shape": "dot", "size": 43, "title": "ARO:0000017: lincosamide antibiotic; \"Lincosamides (e.g. lincomycin, clindamycin)\nare a class of drugs which bind to the 23s portion of the 50S subunit of bacterial\nribosomes. This interaction inhibits early elongation of peptide chains by inhibiting\nthe transpeptidase reaction, acting similarly to macrolides.\" [PMID:15135500, PMID:10582867]"}, {"color": "blue", "font": {"color": "#111111", "multi": true, "size": 47}, "group": "card", "id": "ARO:3000185", "label": "antibiotic target protection protein", "shape": "dot", "size": 31, "title": "ARO:3000185: antibiotic target protection protein; \"These proteins confer antibiotic\nresistance by bind the antibiotic target to prevent antibiotic binding.\" []"}, {"color": "blue", "font": {"color": "#111111", "multi": true, "size": 47}, "group": "card", "id": "ARO:3000080", "label": "aminonucleoside antibiotic", "shape": "dot", "size": 31, "title": "ARO:3000080: aminonucleoside antibiotic; \"Aminonucleoside antibiotics are nucleoside\nantibiotics that contain an amino group. This amino group is often acylated, e.g.\npuromycin.\" [PMID:8576156]"}, {"color": "rebeccapurple", "font": {"color": "#111111", "multi": true, "size": 47}, "group": "Antibiotic", "id": "ARO:0000066", "label": "clindamycin", "shape": "dot", "size": 31, "title": "ARO:0000066: clindamycin; \"Clindamycin is a lincosamide antibiotic that blocks A-site\naminoacyl-tRNA binding. It is usually used to treat infections with anaerobic bacteria\nbut can also be used to treat some protozoal diseases, such as malaria.\" [PMID:20876128]"}, {"color": "mediumorchid", "font": {"color": "#111111", "multi": true, "size": 47}, "group": "Drug Class", "id": "ARO:0000034", "label": "streptogramin A antibiotic", "shape": "dot", "size": 31, "title": "ARO:0000034: streptogramin A antibiotic; \"Streptogramin A antibiotics are cyclic\npolyketide peptide hybrids that bind to the ribosomal peptidyl transfer centre. Structural\nvariation arises from substituting a proline for its desaturated derivative and by\nits substitution for Ala or Cys. Used alone, streptogramin A antibiotics are bacteriostatic,\nbut is bactericidal when used with streptogramin B antibiotics.\" [PMID:17015629,\nPMID:12860128, PMID:12102603, PMID:15700955]"}, {"color": "deepskyblue", "font": {"color": "#111111", "multi": true, "size": 47}, "group": "Resistance Mechanism", "id": "ARO:0001003", "label": "antibiotic target protection", "shape": "dot", "size": 31, "title": "ARO:0001003: antibiotic target protection; \"Protection of antibiotic action target\nfrom antibiotic binding, which process will result in antibiotic resistance.\" [PMID:32587401]"}, {"color": "steelblue", "font": {"color": "#111111", "multi": true, "size": 47}, "group": "AMR Gene Family", "id": "ARO:3007068", "label": "Miscellaneous ABC-F subfamily ATP-binding\ncassette ribosomal protection proteins", "shape": "dot", "size": 31, "title": "ARO:3007068: Miscellaneous ABC-F subfamily ATP-binding cassette ribosomal protection\nproteins; \"ABC-F subfamily ATP-binding cassette ribosomal protection proteins of\nunknown, unclear or miscellaneous classification which nevertheless confer resistance\nto antibiotics through ribosomal protection and not through antibiotic efflux. These\nproteins should be further reviewed to elucidate associated genes, their function,\norigin and classification.\" []"}, {"color": "rebeccapurple", "font": {"color": "#111111", "multi": true, "size": 47}, "group": "Antibiotic", "id": "ARO:3007639", "label": "A201A", "shape": "dot", "size": 31, "title": "ARO:3007639: A201A; \"A201A is a nucleoside antibiotic. It inhibits translation by\nbinding to the peptidyl transferase center on the large ribosomal subunit. This prevents\nthe binding of aminoacyl-tRNA to the A-site.\" [PMID:26028538]"}, {"color": "red", "font": {"color": "#111111", "multi": true, "size": 45}, "group": "uniprot", "id": "Q182T3", "label": "Q182T3", "shape": "dot", "size": 25, "title": "Q182T3"}]);
+                  edges = new vis.DataSet([{"color": "olive", "font": {"color": "olivedrab", "multi": true, "size": 18}, "from": "ARO:3000669", "label": "is_a", "title": "", "to": "ARO:0000034", "width": 2}, {"color": "olive", "font": {"color": "olivedrab", "multi": true, "size": 18}, "from": "ARO:0000046", "label": "is_a", "title": "", "to": "ARO:0000017", "width": 2}, {"color": "olive", "font": {"color": "olivedrab", "multi": true, "size": 18}, "from": "ARO:3007637", "label": "is_a", "title": "", "to": "ARO:3007068", "width": 2}, {"color": "firebrick", "font": {"color": "indianred", "multi": true, "size": 18}, "from": "ARO:3007637", "label": "confers_resistance_to_antibiotic", "title": "", "to": "ARO:0000046", "width": 2}, {"color": "firebrick", "font": {"color": "indianred", "multi": true, "size": 18}, "from": "ARO:3007637", "label": "confers_resistance_to_antibiotic", "title": "", "to": "ARO:0000066", "width": 2}, {"color": "firebrick", "font": {"color": "indianred", "multi": true, "size": 18}, "from": "ARO:3007637", "label": "confers_resistance_to_antibiotic", "title": "", "to": "ARO:3000669", "width": 2}, {"color": "firebrick", "font": {"color": "indianred", "multi": true, "size": 18}, "from": "ARO:3007637", "label": "confers_resistance_to_antibiotic", "title": "", "to": "ARO:3007636", "width": 2}, {"color": "firebrick", "font": {"color": "indianred", "multi": true, "size": 18}, "from": "ARO:3007637", "label": "confers_resistance_to_antibiotic", "title": "", "to": "ARO:3007639", "width": 2}, {"color": "olive", "font": {"color": "olivedrab", "multi": true, "size": 18}, "from": "ARO:3004469", "label": "is_a", "title": "", "to": "ARO:3000185", "width": 2}, {"color": "olive", "font": {"color": "olivedrab", "multi": true, "size": 18}, "from": "ARO:3007636", "label": "is_a", "title": "", "to": "ARO:0000017", "width": 2}, {"color": "#666666", "font": {"color": "gray", "multi": true, "size": 18}, "from": "ARO:3000185", "label": "participates_in", "title": "", "to": "ARO:0001003", "width": 2}, {"color": "olive", "font": {"color": "olivedrab", "multi": true, "size": 18}, "from": "ARO:3000080", "label": "is_a", "title": "", "to": "ARO:3000034", "width": 2}, {"color": "olive", "font": {"color": "olivedrab", "multi": true, "size": 18}, "from": "ARO:0000066", "label": "is_a", "title": "", "to": "ARO:0000017", "width": 2}, {"color": "olive", "font": {"color": "olivedrab", "multi": true, "size": 18}, "from": "ARO:0000034", "label": "is_a", "title": "", "to": "ARO:0000026", "width": 2}, {"color": "olive", "font": {"color": "olivedrab", "multi": true, "size": 18}, "from": "ARO:3007068", "label": "is_a", "title": "", "to": "ARO:3004469", "width": 2}, {"color": "olive", "font": {"color": "olivedrab", "multi": true, "size": 18}, "from": "ARO:3007639", "label": "is_a", "title": "", "to": "ARO:3000080", "width": 2}, {"color": "#666666", "font": {"color": "gray", "multi": true, "size": 18}, "from": "Q182T3", "label": "is", "title": "", "to": "ARO:3007637", "width": 2}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {"nodes": {"color": {"highlight": {"border": "white", "background": "black"}, "hover": {"border": "white", "background": "black"}}}, "edges": {"color": {"color": "gray"}, "font": {"color": "gray", "size": 16, "face": "arial", "background": "none", "strokeWidth": 0, "strokeColor": "none", "multi": true}, "smooth": true, "arrows": {"to": {"enabled": true, "scaleFactor": 2}}}, "physics": {"barnesHut": {"gravitationalConstant": -20000, "centralGravity": 0.3, "springLength": 200, "springConstant": 0.01, "damping": 0.09}, "minVelocity": 0.75}};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
