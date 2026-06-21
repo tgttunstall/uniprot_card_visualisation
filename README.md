@@ -199,6 +199,8 @@ Open a generated demo graph directly in Firefox:
 firefox demo_html/ARO3007637_Q182T3.html
 firefox demo_html/ARO3003373_A6T5M6.html
 firefox demo_html/ARO3000263_P0ACH7.html
+firefox demo_html/ARO3004294_Q8GQB0.html
+firefox demo_html/ARO3005558_Q8GQB0.html
 ```
 
 ## What The Graph Shows
