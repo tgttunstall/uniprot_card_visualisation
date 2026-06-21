@@ -220,7 +220,7 @@ Edges show CARD relationships such as `is_a`, `confers_resistance_to_antibiotic`
 Larger nodes have more incoming connections in the rendered graph, so node size is a visual cue for how connected a term is within that payload.
 
 
-** Summary of Outstanding issues / tasks:**
+## Summary of Outstanding issues / tasks:
 
 - [ ] CARD to provide the API endpoint for graph payloads.
 - [ ] CARD to provide reciprocal links with UniProt.
