@@ -16,6 +16,8 @@ This repo uses those existing CARD mappings to generate one CARD knowledge graph
 
 This workflow currently treats each row in `CARD-UniProt-Mapping.tsv` as one graph payload. If a UniProt accession maps to more than one CARD ARO entry, each mapping should produce a separate payload. Including both IDs in the filename keeps those cases unambiguous, for example `ARO3000001_P12345.json` and `ARO3000002_P12345.json`.
 
+See `NOTE.txt` for mapping-count details. The current mapping contains 4494 unique UniProt + ARO pairs from 4496 mapping rows, including 14 UniProt accessions with more than one distinct ARO mapping and 2 exact duplicate UniProt + ARO rows.
+
 ## Integration Goal
 
 The intended final integration is:
@@ -84,7 +86,7 @@ card_api_data/ARO3007637_Q182T3.json
 
 ## 2. Generate All Mock API Payloads
 
-To generate one graph payload for each of the 4496 UniProt mappings, run:
+To generate one graph payload for each unique UniProt + ARO mapping, run:
 
 ```bash
 bash generate_all_mock_payloads.sh
@@ -96,7 +98,9 @@ The expected output pattern is:
 card_api_data/ARO<NUMBER>_<ACCESSION>.json
 ```
 
-After this step, `card_api_data/` acts as a local mock CARD API dataset for the mapped UniProt accessions. The script prints progress as it runs, and if an accession fails, the script continues and logs the failed UniProt accession, ARO, and CARD URL to:
+After this step, `card_api_data/` acts as a local mock CARD API dataset for the mapped UniProt accessions. The script processes 4494 unique UniProt + ARO pairs, skips existing JSON files so it can be safely rerun, and passes the row-specific ARO to `run_extract_card_subgraph.py`.
+
+If an accession fails, the script continues and logs the failed UniProt accession, ARO, and CARD URL to:
 
 ```text
 card_api_data/generation_failures.tsv
@@ -187,3 +191,21 @@ firefox demo_html/ARO3007637_Q182T3.html
 firefox demo_html/ARO3003373_A6T5M6.html
 firefox demo_html/ARO3000263_P0ACH7.html
 ```
+
+## What The Graph Shows
+
+Each graph shows one UniProt accession and one CARD ARO mapping. The UniProt node links to the mapped CARD ARO term, then expands into related CARD ontology terms such as resistance mechanisms, AMR gene families, drug classes, antibiotics, and variant/SNP nodes where available.
+
+Node colours indicate category:
+
+- Red: UniProt accession
+- Blue: general CARD/ARO term
+- Purple: antibiotic
+- Medium purple: drug class
+- Steel blue: AMR gene family
+- Light blue: resistance mechanism
+- Orange: variant/SNP node
+
+Edges show CARD relationships such as `is_a`, `confers_resistance_to_antibiotic`, and `confers_resistance_to_drug_class`.
+
+Larger nodes have more incoming connections in the rendered graph, so node size is a visual cue for how connected a term is within that payload.
