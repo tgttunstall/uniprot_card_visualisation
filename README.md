@@ -185,7 +185,9 @@ python run_render_kg.py \
 firefox demo_html/ARO3007637_Q182T3.html
 ```
 
-`--accession` and `--aro-id` are both required so rendering is explicit if one UniProt accession has multiple CARD ARO mappings. If `--subgraph-json` is omitted, the renderer expects the file at:
+`--accession` and `--aro-id` are both required so rendering is explicit if one UniProt accession has multiple CARD ARO mappings. In these demo commands, keep `--subgraph-json` explicit because the JSON input is in `card_api_data/` while the HTML output is written to `demo_html/`.
+
+If `--subgraph-json` is omitted, the renderer derives the JSON path from `--outdir`, `--aro-id`, and `--accession`, for example:
 
 ```text
 card_api_data/ARO3007637_Q182T3.json
@@ -225,3 +227,18 @@ Debug outputs use the same ARO/accession basename, for example `trace_ARO3007637
 `src/card_vis_extract.py` contains mapping lookup, CARD subgraph extraction, variant/SNP enrichment, and payload creation.
 
 `src/card_vis_render.py` contains category colouring, label/title wrapping, PyVis rendering, and debug trace export.
+
+## Examples To Try
+
+Open a generated demo graph directly in Firefox:
+
+```bash
+firefox demo_html/ARO3007637_Q182T3.html
+```
+
+Other generated examples may include:
+
+```bash
+firefox demo_html/ARO3003373_A6T5M6.html
+firefox demo_html/ARO3000263_P0ACH7.html
+```
