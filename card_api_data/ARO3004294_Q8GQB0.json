@@ -1,0 +1,245 @@
+{
+  "uniprot": "Q8GQB0",
+  "aro_root": "ARO:3004294",
+  "nodes": [
+    {
+      "id": "ARO:3004294",
+      "name": "BUT-1",
+      "namespace": "antibiotic_resistance",
+      "def": "\"A chromosome-encoded  class C cephalosporinase and penicillinase from Buttiauxella spp. shown clinically to confer resistance to beta-lactam antibiotics. Described by Fihman et al. 2002.\" [PMID:12127496]",
+      "is_a": [
+        "ARO:3004293"
+      ],
+      "label": "BUT-1",
+      "title": "ARO:3004294: BUT-1; \"A chromosome-encoded  class C cephalosporinase and penicillinase from Buttiauxella spp. shown clinically to confer resistance to beta-lactam antibiotics. Described by Fihman et al. 2002.\" [PMID:12127496]",
+      "category": null,
+      "sources": [
+        "aro.obo"
+      ]
+    },
+    {
+      "id": "ARO:3000007",
+      "name": "beta-lactam antibiotic",
+      "namespace": "antibiotic_resistance",
+      "def": "\"Beta-lactam antibiotics are a broad class of antibiotics that include penams (penicillin derivatives), cephems (cephalosporins), monobactams, and carbapenems. These antibiotic agents contain a beta-lactam nucleus in its molecular structure. They are the most widely-used group of antibiotics.\" [PMID:3889939]",
+      "is_a": [
+        "ARO:1000003"
+      ],
+      "label": "beta-lactam antibiotic",
+      "title": "ARO:3000007: beta-lactam antibiotic; \"Beta-lactam antibiotics are a broad class of antibiotics that include penams (penicillin derivatives), cephems (cephalosporins), monobactams, and carbapenems. These antibiotic agents contain a beta-lactam nucleus in its molecular structure. They are the most widely-used group of antibiotics.\" [PMID:3889939]",
+      "category": null,
+      "sources": [
+        "aro.obo"
+      ]
+    },
+    {
+      "id": "ARO:3000076",
+      "name": "class C beta-lactamase",
+      "namespace": "antibiotic_resistance",
+      "def": "\"AmpC type beta-lactamases are commonly isolated from extended-spectrum cephalosporin-resistant Gram-negative bacteria. AmpC beta-lactamases (also termed class C or group 1) are typically encoded on the chromosome of many Gram-negative bacteria including Citrobacter, Serratia, Enterobacter species, and P. aeruginosa where its expression is usually inducible; it may also occur on Escherichia coli but is not usually inducible, although it can be hyperexpressed. AmpC type beta-lactamases may also be carried on plasmids. AmpC beta-lactamases, in contrast to ESBLs, hydrolyse broad and extended-spectrum cephalosporins (cephamycins as well as to oxyimino-beta-lactams) but are not inhibited by beta-lactamase inhibitors such as clavulanic acid.\" [PMID:19822890]",
+      "is_a": [
+        "ARO:3000001"
+      ],
+      "relationship": [
+        "participates_in ARO:3000187"
+      ],
+      "label": "class C beta-lactamase",
+      "title": "ARO:3000076: class C beta-lactamase; \"AmpC type beta-lactamases are commonly isolated from extended-spectrum cephalosporin-resistant Gram-negative bacteria. AmpC beta-lactamases (also termed class C or group 1) are typically encoded on the chromosome of many Gram-negative bacteria including Citrobacter, Serratia, Enterobacter species, and P. aeruginosa where its expression is usually inducible; it may also occur on Escherichia coli but is not usually inducible, although it can be hyperexpressed. AmpC type beta-lactamases may also be carried on plasmids. AmpC beta-lactamases, in contrast to ESBLs, hydrolyse broad and extended-spectrum cephalosporins (cephamycins as well as to oxyimino-beta-lactams) but are not inhibited by beta-lactamase inhibitors such as clavulanic acid.\" [PMID:19822890]",
+      "category": null,
+      "sources": [
+        "aro.obo"
+      ]
+    },
+    {
+      "id": "ARO:0000032",
+      "name": "cephalosporin",
+      "namespace": "antibiotic_resistance",
+      "def": "\"Cephalosporins are a class of beta-lactam antibiotics, containing the beta-lactam ring fused with a dihydrothiazolidine ring. Together with cephamycins they belong to a sub-group called cephems. Cephalosporin are bactericidal, and act by inhibiting the synthesis of the peptidoglycan layer of bacterial cell walls. The peptidoglycan layer is important for cell wall structural integrity, especially in Gram-positive organisms.\" [PMID:15673804, PMID:11585791, PMID:6810737]",
+      "is_a": [
+        "ARO:3000007"
+      ],
+      "label": "cephalosporin",
+      "title": "ARO:0000032: cephalosporin; \"Cephalosporins are a class of beta-lactam antibiotics, containing the beta-lactam ring fused with a dihydrothiazolidine ring. Together with cephamycins they belong to a sub-group called cephems. Cephalosporin are bactericidal, and act by inhibiting the synthesis of the peptidoglycan layer of bacterial cell walls. The peptidoglycan layer is important for cell wall structural integrity, especially in Gram-positive organisms.\" [PMID:15673804, PMID:11585791, PMID:6810737]",
+      "category": "Drug Class",
+      "sources": [
+        "aro.obo",
+        "aro_categories.tsv"
+      ]
+    },
+    {
+      "id": "ARO:3000187",
+      "name": "hydrolysis of beta-lactam antibiotic by serine beta-lactamase",
+      "namespace": "antibiotic_resistance",
+      "def": "\"Mechanism of enzymatic degradation common to Ambler Class A, C and D beta-lactamases.  A serine residue located in the active site is used to form an acyl-enzyme intermediate and subsequent hydrolysis renders the beta-lactam inactive.\" []",
+      "is_a": [
+        "ARO:3000040"
+      ],
+      "label": "hydrolysis of beta-lactam antibiotic by serine beta-lactamase",
+      "title": "ARO:3000187: hydrolysis of beta-lactam antibiotic by serine beta-lactamase; \"Mechanism of enzymatic degradation common to Ambler Class A, C and D beta-lactamases.  A serine residue located in the active site is used to form an acyl-enzyme intermediate and subsequent hydrolysis renders the beta-lactam inactive.\" []",
+      "category": null,
+      "sources": [
+        "aro.obo"
+      ]
+    },
+    {
+      "id": "ARO:3000557",
+      "name": "antibiotic inactivation enzyme",
+      "namespace": "antibiotic_resistance",
+      "def": "\"Enzyme that catalyzes the inactivation of an antibiotic resulting in resistance.  Inactivation includes chemical modification, destruction, etc.\" []",
+      "is_a": [
+        "ARO:3000000"
+      ],
+      "relationship": [
+        "participates_in ARO:0001004"
+      ],
+      "label": "antibiotic inactivation enzyme",
+      "title": "ARO:3000557: antibiotic inactivation enzyme; \"Enzyme that catalyzes the inactivation of an antibiotic resulting in resistance.  Inactivation includes chemical modification, destruction, etc.\" []",
+      "category": null,
+      "sources": [
+        "aro.obo"
+      ]
+    },
+    {
+      "id": "ARO:3000040",
+      "name": "hydrolysis of antibiotic conferring resistance",
+      "namespace": "antibiotic_resistance",
+      "def": "\"Hydrolysis of an antibiotic molecule to confer resistance.\" []",
+      "is_a": [
+        "ARO:0001004"
+      ],
+      "label": "hydrolysis of antibiotic conferring resistance",
+      "title": "ARO:3000040: hydrolysis of antibiotic conferring resistance; \"Hydrolysis of an antibiotic molecule to confer resistance.\" []",
+      "category": null,
+      "sources": [
+        "aro.obo"
+      ]
+    },
+    {
+      "id": "ARO:0001004",
+      "name": "antibiotic inactivation",
+      "namespace": "antibiotic_resistance",
+      "def": "\"Enzymatic inactivation of antibiotic to confer drug resistance.\" [PMID:20564281]",
+      "is_a": [
+        "ARO:1000002"
+      ],
+      "label": "antibiotic inactivation",
+      "title": "ARO:0001004: antibiotic inactivation; \"Enzymatic inactivation of antibiotic to confer drug resistance.\" [PMID:20564281]",
+      "category": "Resistance Mechanism",
+      "sources": [
+        "aro.obo",
+        "aro_categories.tsv"
+      ]
+    },
+    {
+      "id": "ARO:3004293",
+      "name": "BUT beta-lactamase",
+      "namespace": "antibiotic_resistance",
+      "def": "\"A class C beta-lactamase family of chromosome-encoded antibiotic resistance genes originally described from Buttiauxella spp.\" [PMID:12127496]",
+      "is_a": [
+        "ARO:3000076"
+      ],
+      "relationship": [
+        "confers_resistance_to_drug_class ARO:0000032"
+      ],
+      "label": "BUT beta-lactamase",
+      "title": "ARO:3004293: BUT beta-lactamase; \"A class C beta-lactamase family of chromosome-encoded antibiotic resistance genes originally described from Buttiauxella spp.\" [PMID:12127496]",
+      "category": "AMR Gene Family",
+      "sources": [
+        "aro.obo",
+        "aro_categories.tsv"
+      ]
+    },
+    {
+      "id": "ARO:3000001",
+      "name": "beta-lactamase",
+      "namespace": "antibiotic_resistance",
+      "def": "\"Beta-lactamases are enzymes (EC 3.5.2.6) produced by some bacteria and are responsible for their resistance to beta-lactam antibiotics like penicillins, cephalosporins (are relatively resistant to beta-lactamase), cephamycins, and carbapenems (ertapenem). These antibiotics have a common element in their molecular structure: a four-atom ring known as a beta-lactam. The lactamase enzyme breaks that ring open, deactivating the molecule's antibacterial properties. Beta-lactam antibiotics are typically used to treat a broad spectrum of gram-positive and gram-negative bacteria. Beta-lactamases produced by gram-negative organisms are usually secreted.\" [PMID:6109327, PMID:7574506, PMID:19995920, PMID:21220461]",
+      "is_a": [
+        "ARO:3000557"
+      ],
+      "label": "beta-lactamase",
+      "title": "ARO:3000001: beta-lactamase; \"Beta-lactamases are enzymes (EC 3.5.2.6) produced by some bacteria and are responsible for their resistance to beta-lactam antibiotics like penicillins, cephalosporins (are relatively resistant to beta-lactamase), cephamycins, and carbapenems (ertapenem). These antibiotics have a common element in their molecular structure: a four-atom ring known as a beta-lactam. The lactamase enzyme breaks that ring open, deactivating the molecule's antibacterial properties. Beta-lactam antibiotics are typically used to treat a broad spectrum of gram-positive and gram-negative bacteria. Beta-lactamases produced by gram-negative organisms are usually secreted.\" [PMID:6109327, PMID:7574506, PMID:19995920, PMID:21220461]",
+      "category": null,
+      "sources": [
+        "aro.obo"
+      ]
+    },
+    {
+      "id": "Q8GQB0",
+      "name": "Q8GQB0",
+      "label": "Q8GQB0",
+      "title": "Q8GQB0",
+      "sources": [
+        "input"
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "source": "ARO:3004294",
+      "target": "ARO:3004293",
+      "label": "is_a",
+      "title": ""
+    },
+    {
+      "source": "ARO:3000076",
+      "target": "ARO:3000001",
+      "label": "is_a",
+      "title": ""
+    },
+    {
+      "source": "ARO:3000076",
+      "target": "ARO:3000187",
+      "label": "participates_in",
+      "title": ""
+    },
+    {
+      "source": "ARO:0000032",
+      "target": "ARO:3000007",
+      "label": "is_a",
+      "title": ""
+    },
+    {
+      "source": "ARO:3000187",
+      "target": "ARO:3000040",
+      "label": "is_a",
+      "title": ""
+    },
+    {
+      "source": "ARO:3000557",
+      "target": "ARO:0001004",
+      "label": "participates_in",
+      "title": ""
+    },
+    {
+      "source": "ARO:3000040",
+      "target": "ARO:0001004",
+      "label": "is_a",
+      "title": ""
+    },
+    {
+      "source": "ARO:3004293",
+      "target": "ARO:3000076",
+      "label": "is_a",
+      "title": ""
+    },
+    {
+      "source": "ARO:3004293",
+      "target": "ARO:0000032",
+      "label": "confers_resistance_to_drug_class",
+      "title": ""
+    },
+    {
+      "source": "ARO:3000001",
+      "target": "ARO:3000557",
+      "label": "is_a",
+      "title": ""
+    },
+    {
+      "source": "Q8GQB0",
+      "target": "ARO:3004294",
+      "label": "is",
+      "title": ""
+    }
+  ]
+}

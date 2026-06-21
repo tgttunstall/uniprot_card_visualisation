@@ -1,0 +1,384 @@
+{
+  "uniprot": "Q182T3",
+  "aro_root": "ARO:3007637",
+  "nodes": [
+    {
+      "id": "ARO:3000669",
+      "name": "virginiamycin M1",
+      "namespace": "antibiotic_resistance",
+      "def": "\"Virginiamycin M1 is a streptogramin A antibiotic.\" [PMID:15700955]",
+      "is_a": [
+        "ARO:0000034"
+      ],
+      "xref": [
+        "ChEMBL:CHEMBL1236670",
+        "PubChem:46936184"
+      ],
+      "label": "virginiamycin M1",
+      "title": "ARO:3000669: virginiamycin M1; \"Virginiamycin M1 is a streptogramin A antibiotic.\" [PMID:15700955]",
+      "category": "Antibiotic",
+      "sources": [
+        "aro.obo"
+      ]
+    },
+    {
+      "id": "ARO:0000046",
+      "name": "lincomycin",
+      "namespace": "antibiotic_resistance",
+      "def": "\"Lincomycin is a lincosamide antibiotic that comes from the actinomyces Streptomyces lincolnensis. It binds to the 23s portion of the 50S subunit of bacterial ribosomes and inhibit early elongation of peptide chain by inhibiting transpeptidase reaction.\" [PMID:10582867, PMID:15135500]",
+      "is_a": [
+        "ARO:0000017"
+      ],
+      "xref": [
+        "CAS:154-21-2",
+        "ChEBI:6472",
+        "ChEMBL:CHEMBL1447",
+        "PubChem:3000540"
+      ],
+      "label": "lincomycin",
+      "title": "ARO:0000046: lincomycin; \"Lincomycin is a lincosamide antibiotic that comes from the actinomyces Streptomyces lincolnensis. It binds to the 23s portion of the 50S subunit of bacterial ribosomes and inhibit early elongation of peptide chain by inhibiting transpeptidase reaction.\" [PMID:10582867, PMID:15135500]",
+      "category": "Antibiotic",
+      "sources": [
+        "aro.obo"
+      ]
+    },
+    {
+      "id": "ARO:3000034",
+      "name": "nucleoside antibiotic",
+      "namespace": "antibiotic_resistance",
+      "def": "\"Nucleoside antibiotics are made of modified nucleosides and nucleotides with wide-ranging activities and means of antibacterial effects. This drug class includes aminonucleoside antibiotics, which contain an amino group.\" [PMID:3061990, PMID:18679046]",
+      "is_a": [
+        "ARO:1000003"
+      ],
+      "label": "nucleoside antibiotic",
+      "title": "ARO:3000034: nucleoside antibiotic; \"Nucleoside antibiotics are made of modified nucleosides and nucleotides with wide-ranging activities and means of antibacterial effects. This drug class includes aminonucleoside antibiotics, which contain an amino group.\" [PMID:3061990, PMID:18679046]",
+      "category": "Drug Class",
+      "sources": [
+        "aro.obo",
+        "aro_categories.tsv"
+      ]
+    },
+    {
+      "id": "ARO:3007637",
+      "name": "Clostridioides difficile cplR",
+      "namespace": "antibiotic_resistance",
+      "def": "\"CplR is an ABC-F ATPase ribosomal protection protein from Clostridioides difficile which confers resistance to pleuromutilins and lincosamides. Its resistance to these antibiotics increases in synergy with erythromcyin resistance methylases (e.g., ermB).\" [PMID:36951104]",
+      "is_a": [
+        "ARO:3007068"
+      ],
+      "relationship": [
+        "confers_resistance_to_antibiotic ARO:0000046",
+        "confers_resistance_to_antibiotic ARO:0000066",
+        "confers_resistance_to_antibiotic ARO:3000669",
+        "confers_resistance_to_antibiotic ARO:3007636",
+        "confers_resistance_to_antibiotic ARO:3007639"
+      ],
+      "label": "cplR",
+      "title": "ARO:3007637: Clostridioides difficile cplR; \"CplR is an ABC-F ATPase ribosomal protection protein from Clostridioides difficile which confers resistance to pleuromutilins and lincosamides. Its resistance to these antibiotics increases in synergy with erythromcyin resistance methylases (e.g., ermB).\" [PMID:36951104]",
+      "category": null,
+      "sources": [
+        "aro.obo"
+      ]
+    },
+    {
+      "id": "ARO:3004469",
+      "name": "ABC-F ATP-binding cassette ribosomal protection protein",
+      "namespace": "antibiotic_resistance",
+      "def": "\"A subfamily of the ATP-binding cassette protein superfamily. Unlike other ABC proteins, ABC-F genes are not fused to a transmembrane domain nor associated with transport. It has been shown that ABC-F proteins confer antibiotic resistance via ribosomal protection and not antibiotic efflux as in other ABC proteins.\" [PMID:29376318, PMID:27006457]",
+      "is_a": [
+        "ARO:3000185"
+      ],
+      "label": "ABC-F ATP-binding cassette ribosomal protection protein",
+      "title": "ARO:3004469: ABC-F ATP-binding cassette ribosomal protection protein; \"A subfamily of the ATP-binding cassette protein superfamily. Unlike other ABC proteins, ABC-F genes are not fused to a transmembrane domain nor associated with transport. It has been shown that ABC-F proteins confer antibiotic resistance via ribosomal protection and not antibiotic efflux as in other ABC proteins.\" [PMID:29376318, PMID:27006457]",
+      "category": null,
+      "sources": [
+        "aro.obo"
+      ]
+    },
+    {
+      "id": "ARO:3007636",
+      "name": "iboxamycin",
+      "namespace": "antibiotic_resistance",
+      "def": "\"Iboxamycin is a fully synthetic lincosamide antibiotic. Like other lincosamides, it selectively targets the bacterial ribosome and prevents elongation of the peptide chain. Iboxamycin has been shown to  be effective against bacterial strains otherwise resistant to licosamide antibiotics.\" [PMID:34707295]",
+      "is_a": [
+        "ARO:0000017"
+      ],
+      "xref": [
+        "PubChem:156613433"
+      ],
+      "label": "iboxamycin",
+      "title": "ARO:3007636: iboxamycin; \"Iboxamycin is a fully synthetic lincosamide antibiotic. Like other lincosamides, it selectively targets the bacterial ribosome and prevents elongation of the peptide chain. Iboxamycin has been shown to  be effective against bacterial strains otherwise resistant to licosamide antibiotics.\" [PMID:34707295]",
+      "category": "Antibiotic",
+      "sources": [
+        "aro.obo"
+      ]
+    },
+    {
+      "id": "ARO:0000026",
+      "name": "streptogramin antibiotic",
+      "namespace": "antibiotic_resistance",
+      "def": "\"Streptogramin antibiotics are natural products produced by various members of the Streptomyces genus. These antibiotics bind to the P site of the 50S subunit of bacterial ribosomes to inhibit protein synthesis. The family consists of two subgroups, type A and type B, which are simultaneously produced by the same bacterial species in a ratio of roughly 70:30.\" [PMID:15700955]",
+      "is_a": [
+        "ARO:1000003"
+      ],
+      "label": "streptogramin antibiotic",
+      "title": "ARO:0000026: streptogramin antibiotic; \"Streptogramin antibiotics are natural products produced by various members of the Streptomyces genus. These antibiotics bind to the P site of the 50S subunit of bacterial ribosomes to inhibit protein synthesis. The family consists of two subgroups, type A and type B, which are simultaneously produced by the same bacterial species in a ratio of roughly 70:30.\" [PMID:15700955]",
+      "category": "Drug Class",
+      "sources": [
+        "aro.obo",
+        "aro_categories.tsv"
+      ]
+    },
+    {
+      "id": "ARO:0000017",
+      "name": "lincosamide antibiotic",
+      "namespace": "antibiotic_resistance",
+      "def": "\"Lincosamides (e.g. lincomycin, clindamycin) are a class of drugs which bind to the 23s portion of the 50S subunit of bacterial ribosomes. This interaction inhibits early elongation of peptide chains by inhibiting the transpeptidase reaction, acting similarly to macrolides.\" [PMID:15135500, PMID:10582867]",
+      "is_a": [
+        "ARO:1000003"
+      ],
+      "label": "lincosamide antibiotic",
+      "title": "ARO:0000017: lincosamide antibiotic; \"Lincosamides (e.g. lincomycin, clindamycin) are a class of drugs which bind to the 23s portion of the 50S subunit of bacterial ribosomes. This interaction inhibits early elongation of peptide chains by inhibiting the transpeptidase reaction, acting similarly to macrolides.\" [PMID:15135500, PMID:10582867]",
+      "category": "Drug Class",
+      "sources": [
+        "aro.obo",
+        "aro_categories.tsv"
+      ]
+    },
+    {
+      "id": "ARO:3000185",
+      "name": "antibiotic target protection protein",
+      "namespace": "antibiotic_resistance",
+      "def": "\"These proteins confer antibiotic resistance by bind the antibiotic target to prevent antibiotic binding.\" []",
+      "is_a": [
+        "ARO:3000000"
+      ],
+      "relationship": [
+        "participates_in ARO:0001003"
+      ],
+      "label": "antibiotic target protection protein",
+      "title": "ARO:3000185: antibiotic target protection protein; \"These proteins confer antibiotic resistance by bind the antibiotic target to prevent antibiotic binding.\" []",
+      "category": null,
+      "sources": [
+        "aro.obo"
+      ]
+    },
+    {
+      "id": "ARO:3000080",
+      "name": "aminonucleoside antibiotic",
+      "namespace": "antibiotic_resistance",
+      "def": "\"Aminonucleoside antibiotics are nucleoside antibiotics that contain an amino group. This amino group is often acylated, e.g. puromycin.\" [PMID:8576156]",
+      "is_a": [
+        "ARO:3000034"
+      ],
+      "label": "aminonucleoside antibiotic",
+      "title": "ARO:3000080: aminonucleoside antibiotic; \"Aminonucleoside antibiotics are nucleoside antibiotics that contain an amino group. This amino group is often acylated, e.g. puromycin.\" [PMID:8576156]",
+      "category": null,
+      "sources": [
+        "aro.obo"
+      ]
+    },
+    {
+      "id": "ARO:0000066",
+      "name": "clindamycin",
+      "namespace": "antibiotic_resistance",
+      "def": "\"Clindamycin is a lincosamide antibiotic that blocks A-site aminoacyl-tRNA binding. It is usually used to treat infections with anaerobic bacteria but can also be used to treat some protozoal diseases, such as malaria.\" [PMID:20876128]",
+      "is_a": [
+        "ARO:0000017"
+      ],
+      "xref": [
+        "CAS:18323-44-9",
+        "ChEBI:3745",
+        "ChEMBL:CHEMBL1753",
+        "PubChem:446598"
+      ],
+      "label": "clindamycin",
+      "title": "ARO:0000066: clindamycin; \"Clindamycin is a lincosamide antibiotic that blocks A-site aminoacyl-tRNA binding. It is usually used to treat infections with anaerobic bacteria but can also be used to treat some protozoal diseases, such as malaria.\" [PMID:20876128]",
+      "category": "Antibiotic",
+      "sources": [
+        "aro.obo"
+      ]
+    },
+    {
+      "id": "ARO:0000034",
+      "name": "streptogramin A antibiotic",
+      "namespace": "antibiotic_resistance",
+      "def": "\"Streptogramin A antibiotics are cyclic polyketide peptide hybrids that bind to the ribosomal peptidyl transfer centre. Structural variation arises from substituting a proline for its desaturated derivative and by its substitution for Ala or Cys. Used alone, streptogramin A antibiotics are bacteriostatic, but is bactericidal when used with streptogramin B antibiotics.\" [PMID:17015629, PMID:12860128, PMID:12102603, PMID:15700955]",
+      "is_a": [
+        "ARO:0000026"
+      ],
+      "label": "streptogramin A antibiotic",
+      "title": "ARO:0000034: streptogramin A antibiotic; \"Streptogramin A antibiotics are cyclic polyketide peptide hybrids that bind to the ribosomal peptidyl transfer centre. Structural variation arises from substituting a proline for its desaturated derivative and by its substitution for Ala or Cys. Used alone, streptogramin A antibiotics are bacteriostatic, but is bactericidal when used with streptogramin B antibiotics.\" [PMID:17015629, PMID:12860128, PMID:12102603, PMID:15700955]",
+      "category": "Drug Class",
+      "sources": [
+        "aro.obo",
+        "aro_categories.tsv"
+      ]
+    },
+    {
+      "id": "ARO:0001003",
+      "name": "antibiotic target protection",
+      "namespace": "antibiotic_resistance",
+      "def": "\"Protection of antibiotic action target from antibiotic binding, which process will result in antibiotic resistance.\" [PMID:32587401]",
+      "is_a": [
+        "ARO:1000002"
+      ],
+      "label": "antibiotic target protection",
+      "title": "ARO:0001003: antibiotic target protection; \"Protection of antibiotic action target from antibiotic binding, which process will result in antibiotic resistance.\" [PMID:32587401]",
+      "category": "Resistance Mechanism",
+      "sources": [
+        "aro.obo",
+        "aro_categories.tsv"
+      ]
+    },
+    {
+      "id": "ARO:3007068",
+      "name": "Miscellaneous ABC-F subfamily ATP-binding cassette ribosomal protection proteins",
+      "namespace": "antibiotic_resistance",
+      "def": "\"ABC-F subfamily ATP-binding cassette ribosomal protection proteins of unknown, unclear or miscellaneous classification which nevertheless confer resistance to antibiotics through ribosomal protection and not through antibiotic efflux. These proteins should be further reviewed to elucidate associated genes, their function, origin and classification.\" []",
+      "is_a": [
+        "ARO:3004469"
+      ],
+      "label": "Miscellaneous ABC-F subfamily ATP-binding cassette ribosomal protection proteins",
+      "title": "ARO:3007068: Miscellaneous ABC-F subfamily ATP-binding cassette ribosomal protection proteins; \"ABC-F subfamily ATP-binding cassette ribosomal protection proteins of unknown, unclear or miscellaneous classification which nevertheless confer resistance to antibiotics through ribosomal protection and not through antibiotic efflux. These proteins should be further reviewed to elucidate associated genes, their function, origin and classification.\" []",
+      "category": "AMR Gene Family",
+      "sources": [
+        "aro.obo",
+        "aro_categories.tsv"
+      ]
+    },
+    {
+      "id": "ARO:3007639",
+      "name": "A201A",
+      "namespace": "antibiotic_resistance",
+      "def": "\"A201A is a nucleoside antibiotic. It inhibits translation by binding to the peptidyl transferase center on the large ribosomal subunit. This prevents the binding of aminoacyl-tRNA to the A-site.\" [PMID:26028538]",
+      "is_a": [
+        "ARO:3000080"
+      ],
+      "xref": [
+        "ChEBI:222171",
+        "ChEMBL:CHEMBL100042",
+        "PubChem:6441582"
+      ],
+      "label": "A201A",
+      "title": "ARO:3007639: A201A; \"A201A is a nucleoside antibiotic. It inhibits translation by binding to the peptidyl transferase center on the large ribosomal subunit. This prevents the binding of aminoacyl-tRNA to the A-site.\" [PMID:26028538]",
+      "category": "Antibiotic",
+      "sources": [
+        "aro.obo"
+      ]
+    },
+    {
+      "id": "Q182T3",
+      "name": "Q182T3",
+      "label": "Q182T3",
+      "title": "Q182T3",
+      "sources": [
+        "input"
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "source": "ARO:3000669",
+      "target": "ARO:0000034",
+      "label": "is_a",
+      "title": ""
+    },
+    {
+      "source": "ARO:0000046",
+      "target": "ARO:0000017",
+      "label": "is_a",
+      "title": ""
+    },
+    {
+      "source": "ARO:3007637",
+      "target": "ARO:3007068",
+      "label": "is_a",
+      "title": ""
+    },
+    {
+      "source": "ARO:3007637",
+      "target": "ARO:0000046",
+      "label": "confers_resistance_to_antibiotic",
+      "title": ""
+    },
+    {
+      "source": "ARO:3007637",
+      "target": "ARO:0000066",
+      "label": "confers_resistance_to_antibiotic",
+      "title": ""
+    },
+    {
+      "source": "ARO:3007637",
+      "target": "ARO:3000669",
+      "label": "confers_resistance_to_antibiotic",
+      "title": ""
+    },
+    {
+      "source": "ARO:3007637",
+      "target": "ARO:3007636",
+      "label": "confers_resistance_to_antibiotic",
+      "title": ""
+    },
+    {
+      "source": "ARO:3007637",
+      "target": "ARO:3007639",
+      "label": "confers_resistance_to_antibiotic",
+      "title": ""
+    },
+    {
+      "source": "ARO:3004469",
+      "target": "ARO:3000185",
+      "label": "is_a",
+      "title": ""
+    },
+    {
+      "source": "ARO:3007636",
+      "target": "ARO:0000017",
+      "label": "is_a",
+      "title": ""
+    },
+    {
+      "source": "ARO:3000185",
+      "target": "ARO:0001003",
+      "label": "participates_in",
+      "title": ""
+    },
+    {
+      "source": "ARO:3000080",
+      "target": "ARO:3000034",
+      "label": "is_a",
+      "title": ""
+    },
+    {
+      "source": "ARO:0000066",
+      "target": "ARO:0000017",
+      "label": "is_a",
+      "title": ""
+    },
+    {
+      "source": "ARO:0000034",
+      "target": "ARO:0000026",
+      "label": "is_a",
+      "title": ""
+    },
+    {
+      "source": "ARO:3007068",
+      "target": "ARO:3004469",
+      "label": "is_a",
+      "title": ""
+    },
+    {
+      "source": "ARO:3007639",
+      "target": "ARO:3000080",
+      "label": "is_a",
+      "title": ""
+    },
+    {
+      "source": "Q182T3",
+      "target": "ARO:3007637",
+      "label": "is",
+      "title": ""
+    }
+  ]
+}
