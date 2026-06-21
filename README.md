@@ -16,7 +16,10 @@ This repo uses those existing CARD mappings to generate one CARD knowledge graph
 
 This workflow currently treats each row in `CARD-UniProt-Mapping.tsv` as one graph payload. If a UniProt accession maps to more than one CARD ARO entry, each mapping should produce a separate payload. Including both IDs in the filename keeps those cases unambiguous, for example `ARO3000001_P12345.json` and `ARO3000002_P12345.json`.
 
-See `NOTE.txt` for mapping-count details. The current mapping contains 4494 unique UniProt + ARO pairs from 4496 mapping rows, including 14 UniProt accessions with more than one distinct ARO mapping and 2 exact duplicate UniProt + ARO rows.
+See `NOTE.txt` for mapping-count details. 
+The current mapping contains 4494 unique UniProt + ARO pairs from 4496 mapping rows, 
+ including 14 UniProt accessions with more than one distinct ARO mapping 
+ and 2 exact duplicate UniProt + ARO rows.
 
 ## Integration Goal
 
