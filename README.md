@@ -102,55 +102,7 @@ After this step, `card_api_data/` acts as a local mock CARD API dataset for the 
 card_api_data/generation_failures.tsv
 ```
 
-<<<<<<< HEAD
 ## 3. Render One Mock API Payload
-=======
-To check how many payloads were generated:
-
-```bash
-ls card_api_data/ARO*.json | wc -l
-```
-
-## 3. Generate Static Demo HTML Graphs
-
-After generating the mock API JSON payloads, render every payload as a local interactive HTML graph:
-
-```bash
-bash generate_all_html.sh
-```
-
-The JSON files in `card_api_data/` are the mock API responses. The HTML files in `demo_html/` are static PyVis outputs for local demo/review.
-
-**TODO:** In the real CARD/API integration, the frontend should render the graph dynamically from the API JSON response rather than relying on pre-generated static HTML files. The JSON payload should be converted into the frontend graph component's nodes/edges state and rendered in the browser DOM.
-
-The script uses the light theme and writes:
-
-```text
-demo_html/ARO<NUMBER>_<ACCESSION>.html
-```
-
-It prints progress as it runs, for example:
-
-```text
-[1/4496] Rendering card_api_data/ARO3003373_A6T5M6.json -> demo_html/ARO3003373_A6T5M6.html
-[1/4496] OK ARO3003373_A6T5M6
-```
-
-If rendering fails for a payload, the script continues and logs the failed accession, ARO, and JSON path to:
-
-```text
-demo_html/render_failures.tsv
-```
-
-To check how many HTML graphs were generated:
-
-```bash
-ls demo_html/ARO*.html | wc -l
-```
-
-## 4. Render One Mock API Payload
->>>>>>> af5a1ec (updated readme)
-
 Use `run_render_kg.py` to render one generated JSON payload:
 
 ```bash
@@ -169,24 +121,14 @@ This reads the local mock API response and writes an interactive graph:
 demo_html/ARO3007637_Q182T3.html
 ```
 
-This step simulates the frontend receiving `ARO3007637_Q182T3.json` from a future CARD API endpoint and rendering it.
-
-To render and open the demo graph in Firefox:
-
-```bash
-python run_render_kg.py \
-  --accession Q182T3 \
-  --aro-id ARO:3007637 \
-  --subgraph-json card_api_data/ARO3007637_Q182T3.json \
-  --outdir demo_html \
-  --formats pyvis \
-  --theme light && \
+To open the demo graph in Firefox browser:
+```
 firefox demo_html/ARO3007637_Q182T3.html
 ```
 
+*NOTE: 
 `--accession` and `--aro-id` are both required so rendering is explicit if one UniProt accession has multiple CARD ARO mappings. In these demo commands, keep `--subgraph-json` explicit because the JSON input is in `card_api_data/` while the HTML output is written to `demo_html/`.
-
-If `--subgraph-json` is omitted, the renderer derives the JSON path from `--outdir`, `--aro-id`, and `--accession`, for example:
+    `--subgraph-json` if is omitted, the renderer derives the JSON path from `--outdir`, `--aro-id`, and `--accession`, for example:
 
 ```text
 card_api_data/ARO3007637_Q182T3.json
@@ -194,47 +136,33 @@ card_api_data/ARO3007637_Q182T3.json
 
 The renderer checks that the CLI accession and ARO match the JSON payload fields `uniprot` and `aro_root`.
 
-## Debug Outputs
+## OPTIONAL/Debug Outputs for ```run_render_kg.py```
 
-`--trace` writes a debug CSV for inspecting nodes, edges, labels, categories, colours, and sources:
-
-```bash
-python run_render_kg.py \
-  --accession Q182T3 \
-  --aro-id ARO:3007637 \
-  --subgraph-json card_api_data/ARO3007637_Q182T3.json \
-  --outdir demo_html \
-  --formats pyvis \
-  --theme light \
-  --trace
-```
-
+`--trace` writes a debug CSV for inspecting nodes, edges, labels, categories, colours, and sources.
 `--trace-json` writes a fully styled debug JSON snapshot. These debug outputs are optional and are not required for frontend rendering.
-
 Debug outputs use the same ARO/accession basename, for example `trace_ARO3007637_Q182T3.csv`, so they remain unambiguous if one UniProt accession has multiple CARD ARO mappings.
 
 
-## 4. Generate All Demo HTML Graphs
-
-After generating the mock API JSON payloads, render every payload as a local interactive HTML graph:
-
+## 4. Generate Static Demo HTML Graphs for All CARD-UP mappings
 ```bash
 bash generate_all_html.sh
 ```
 
-This is optional. The JSON files in `card_api_data/` are the mock API responses. The HTML files in `demo_html/` are only for local demo/review.
+The JSON files in `card_api_data/` are the mock API responses. The HTML files in `demo_html/` are static PyVis outputs for local demo/review.
 
 The script uses the light theme and writes:
 
 ```text
 demo_html/ARO<NUMBER>_<ACCESSION>.html
 ```
-
+This is optional. The JSON files in `card_api_data/` are the mock API responses. The HTML files in `demo_html/` are only for local demo/review.
 It prints progress as it runs, and if rendering fails for a payload, the script continues and logs the failed accession, ARO, and JSON path to:
 
 ```text
 demo_html/render_failures.tsv
 ```
+
+**TODO:** In the real CARD/API integration, the frontend should render the graph dynamically from the API JSON response rather than relying on pre-generated static HTML files. The JSON payload should be converted into the frontend graph component's nodes/edges state and rendered in the browser DOM.
 
 ## Code Layout
 
