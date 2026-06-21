@@ -14,6 +14,8 @@ The mapping file contains 4497 lines: one header plus 4496 UniProt-to-CARD mappi
 
 This repo uses those existing CARD mappings to generate one CARD knowledge graph payload per UniProt accession.
 
+This workflow currently treats each row in `CARD-UniProt-Mapping.tsv` as one graph payload. If a UniProt accession maps to more than one CARD ARO entry, each mapping should produce a separate payload. Including both IDs in the filename keeps those cases unambiguous, for example `ARO3000001_P12345.json` and `ARO3000002_P12345.json`.
+
 ## Integration Goal
 
 The intended final integration is:
@@ -31,10 +33,10 @@ card_api_data/
 Each generated file acts as a mock CARD API response:
 
 ```text
-card_api_data/card_subgraph_<ACCESSION>.json
+card_api_data/ARO<NUMBER>_<ACCESSION>.json
 ```
 
-For example, `card_api_data/card_subgraph_Q182T3.json` is the mock API response for UniProt accession `Q182T3`.
+For example, `card_api_data/ARO3007637_Q182T3.json` is the mock API response for UniProt accession `Q182T3` mapped to `ARO:3007637`.
 
 ## Setup
 
@@ -74,7 +76,7 @@ python run_extract_card_subgraph.py \
 This writes:
 
 ```text
-card_api_data/card_subgraph_Q182T3.json
+card_api_data/ARO3007637_Q182T3.json
 ```
 
 This step simulates the CARD backend preparing the response that a future API endpoint would return.
@@ -109,7 +111,7 @@ done < map_file/CARD-UniProt-Mapping.tsv
 The expected output pattern is:
 
 ```text
-card_api_data/card_subgraph_<ACCESSION>.json
+card_api_data/ARO<NUMBER>_<ACCESSION>.json
 ```
 
 After this step, `card_api_data/` acts as a local mock CARD API dataset for the mapped UniProt accessions.
@@ -117,7 +119,7 @@ After this step, `card_api_data/` acts as a local mock CARD API dataset for the 
 To check how many payloads were generated:
 
 ```bash
-ls card_api_data/card_subgraph_*.json | wc -l
+ls card_api_data/ARO*.json | wc -l
 ```
 
 ## 3. Render One Mock API Payload
@@ -127,7 +129,8 @@ Use `run_render_kg.py` to render one generated JSON payload:
 ```bash
 python run_render_kg.py \
   --accession Q182T3 \
-  --subgraph-json card_api_data/card_subgraph_Q182T3.json \
+  --aro-id ARO:3007637 \
+  --subgraph-json card_api_data/ARO3007637_Q182T3.json \
   --outdir card_api_data \
   --formats pyvis \
   --theme dark
@@ -136,10 +139,18 @@ python run_render_kg.py \
 This reads the local mock API response and writes an interactive graph:
 
 ```text
-card_api_data/Q182T3.html
+card_api_data/ARO3007637_Q182T3.html
 ```
 
-This step simulates the frontend receiving `card_subgraph_Q182T3.json` from a future CARD API endpoint and rendering it.
+This step simulates the frontend receiving `ARO3007637_Q182T3.json` from a future CARD API endpoint and rendering it.
+
+`--accession` and `--aro-id` are both required so rendering is explicit if one UniProt accession has multiple CARD ARO mappings. If `--subgraph-json` is omitted, the renderer expects the file at:
+
+```text
+card_api_data/ARO3007637_Q182T3.json
+```
+
+The renderer checks that the CLI accession and ARO match the JSON payload fields `uniprot` and `aro_root`.
 
 ## Debug Outputs
 
@@ -148,7 +159,8 @@ This step simulates the frontend receiving `card_subgraph_Q182T3.json` from a fu
 ```bash
 python run_render_kg.py \
   --accession Q182T3 \
-  --subgraph-json card_api_data/card_subgraph_Q182T3.json \
+  --aro-id ARO:3007637 \
+  --subgraph-json card_api_data/ARO3007637_Q182T3.json \
   --outdir card_api_data \
   --formats pyvis \
   --theme dark \
@@ -156,6 +168,8 @@ python run_render_kg.py \
 ```
 
 `--trace-json` writes a fully styled debug JSON snapshot. These debug outputs are optional and are not required for frontend rendering.
+
+Debug outputs use the same ARO/accession basename, for example `trace_ARO3007637_Q182T3.csv`, so they remain unambiguous if one UniProt accession has multiple CARD ARO mappings.
 
 ## Code Layout
 

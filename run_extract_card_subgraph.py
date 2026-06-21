@@ -21,6 +21,11 @@ if SRC not in sys.path:
 from card_vis_extract import build_card_graph, to_payload  # noqa: E402
 
 
+def payload_filename(aro: str, accession: str) -> str:
+    aro_id = aro.replace(":", "")
+    return f"{aro_id}_{accession}.json"
+
+
 def parse_args():
     p = argparse.ArgumentParser(description="Extract CARD subgraph to JSON")
     p.add_argument("--accession", default="Q182T3", help="UniProt accession")
@@ -42,7 +47,6 @@ def parse_args():
 def main() -> None:
     args = parse_args()
     os.makedirs(args.outdir, exist_ok=True)
-    out_path = os.path.join(args.outdir, f"card_subgraph_{args.accession}.json")
 
     if not args.aro_root and not args.map_file:
         raise SystemExit("--map-file is required unless --aro-root is provided")
@@ -54,7 +58,7 @@ def main() -> None:
         print(f"obo_file:    {args.obo_file}")
         print(f"card_json:   {args.card_json}")
         print(f"categories:  {args.categories_file}")
-        print(f"out:         {out_path}")
+        print(f"outdir:      {args.outdir}")
         print(f"include UP:  {bool(args.include_uniprot)}")
 
     graph, aro = build_card_graph(
@@ -66,6 +70,7 @@ def main() -> None:
         aro_override=args.aro_root,
     )
 
+    out_path = os.path.join(args.outdir, payload_filename(aro, args.accession))
     payload = to_payload(graph, aro_root=aro, accession=args.accession, include_uniprot=args.include_uniprot)
 
     with open(out_path, "w") as fh:
