@@ -4,7 +4,7 @@ Lightweight Python scripts to generate and render CARD antimicrobial resistance 
 
 ## Background
 
-CARD already provides UniProt-to-CARD mappings in:
+CARD already provides UniProt-to-CARD mappings as a ```tsv``. A copy of it exists in this repo:
 
 ```text
 map_file/CARD-UniProt-Mapping.tsv
