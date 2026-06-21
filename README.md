@@ -177,12 +177,6 @@ demo_html/render_failures.tsv
 - [ ] The frontend renders the graph dynamically in the browser DOM.
 - [ ] The frontend does not depend on pre-generated static PyVis HTML files from `demo_html/`.
 
-**Outstanding issues / tasks:**
-
-- [ ] CARD to provide the API endpoint for graph payloads.
-- [ ] CARD to provide reciprocal links with UniProt.
-- [ ] Frontend team to help reconfigure/render the graph on the fly using D3, JavaScript, or another frontend graph library.
-
 ## Code Layout
 
 `run_extract_card_subgraph.py` generates one mock API payload from local CARD files.
@@ -224,3 +218,10 @@ Node colours indicate category:
 Edges show CARD relationships such as `is_a`, `confers_resistance_to_antibiotic`, and `confers_resistance_to_drug_class`.
 
 Larger nodes have more incoming connections in the rendered graph, so node size is a visual cue for how connected a term is within that payload.
+
+
+** Summary of Outstanding issues / tasks:**
+
+- [ ] CARD to provide the API endpoint for graph payloads.
+- [ ] CARD to provide reciprocal links with UniProt.
+- [ ] Frontend team to help reconfigure/render the graph on the fly using D3, JavaScript, or another frontend graph library.
