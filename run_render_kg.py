@@ -34,7 +34,7 @@ def parse_args():
     p.add_argument("--accession", required=True, help="UniProt accession")
     p.add_argument("--aro-id", required=True, help="CARD ARO accession, e.g. ARO:3007637")
     p.add_argument("--subgraph-json", default=None, help="Path to subgraph JSON; defaults to <outdir>/ARO<number>_<ACCESSION>.json")
-    p.add_argument("--outdir", default=os.path.join(os.path.expanduser("~"), "card_output"))
+    p.add_argument("--outdir", default=os.path.join(ROOT, "card_api_data"))
     p.add_argument("--formats", default="pyvis", help="Comma list: pyvis")
     p.add_argument("--theme", choices=["dark", "light"], default="dark")
     p.add_argument("--trace", action="store_true", help="Write optional debug trace CSV")

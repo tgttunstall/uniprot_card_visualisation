@@ -2,7 +2,7 @@
 """
 Extract a bare CARD subgraph JSON (nodes/edges only) from local bulk files.
 
-Defaults point to ~/amr paths and write to ~/card_output.
+Defaults point to repo-local mock_api_inputs files and write to card_api_data.
 No env vars required; override via CLI flags.
 """
 
@@ -29,15 +29,15 @@ def payload_filename(aro: str, accession: str) -> str:
 def parse_args():
     p = argparse.ArgumentParser(description="Extract CARD subgraph to JSON")
     p.add_argument("--accession", default="Q182T3", help="UniProt accession")
-    amr_root = os.path.join(os.path.expanduser("~"), "amr")
-    p.add_argument("--map-file", default=os.path.join(amr_root, "map_tsv", "CARD-UniProt-Mapping.tsv"))
-    p.add_argument("--obo-file", default=os.path.join(amr_root, "databases", "card", "ontology", "aro.obo"))
-    p.add_argument("--card-json", default=os.path.join(amr_root, "databases", "card", "data", "card.json"))
+    mock_inputs = os.path.join(ROOT, "mock_api_inputs")
+    p.add_argument("--map-file", default=os.path.join(mock_inputs, "CARD-UniProt-Mapping.tsv"))
+    p.add_argument("--obo-file", default=os.path.join(mock_inputs, "aro.obo"))
+    p.add_argument("--card-json", default=os.path.join(mock_inputs, "card.json"))
     p.add_argument(
         "--categories-file",
-        default=os.path.join(amr_root, "databases", "card", "data", "aro_categories.tsv"),
+        default=os.path.join(mock_inputs, "aro_categories.tsv"),
     )
-    p.add_argument("--outdir", default=os.path.join(os.path.expanduser("~"), "card_output"))
+    p.add_argument("--outdir", default=os.path.join(ROOT, "card_api_data"))
     p.add_argument("--aro-root", help="Override ARO root (skip mapping)")
     p.add_argument("--include-uniprot", action="store_true", help="Include UniProt node and edge (default: off; pass flag to enable)")
     p.add_argument("--verbose", action="store_true", help="Print inputs")

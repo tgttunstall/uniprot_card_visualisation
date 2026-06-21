@@ -4,10 +4,10 @@ Lightweight Python scripts to generate and render CARD antimicrobial resistance 
 
 ## Background
 
-CARD already provides UniProt-to-CARD mappings as a ```tsv``. A copy of it exists in this repo:
+CARD already provides UniProt-to-CARD mappings as a TSV. A copy of it exists in this repo:
 
 ```text
-map_file/CARD-UniProt-Mapping.tsv
+mock_api_inputs/CARD-UniProt-Mapping.tsv
 ```
 
 The mapping file contains 4497 lines: one header plus 4496 UniProt-to-CARD mappings. The key columns are `UPKB`, `ARO Accession`, `CARD Short Name`, `Resistance Mechanism`, and `CARD URL`.
@@ -48,15 +48,16 @@ source ~/myenvs/cardvis_env/bin/activate
 pip install -r cardvis_env_requirements.txt
 ```
 
-The examples below assume the CARD bulk files are available at these paths:
+The examples below use repo-local copies of the CARD mapping and bulk files:
 
 ```text
-~/amr/databases/card/ontology/aro.obo
-~/amr/databases/card/data/card.json
-~/amr/databases/card/data/aro_categories.tsv
+mock_api_inputs/CARD-UniProt-Mapping.tsv
+mock_api_inputs/aro.obo
+mock_api_inputs/card.json
+mock_api_inputs/aro_categories.tsv
 ```
 
-Override those paths in the commands if your local CARD files are somewhere else.
+These local files are only needed to generate mock API payloads while the CARD API endpoint does not exist.
 
 ## 1. Generate One Mock API Payload
 
@@ -65,10 +66,10 @@ Use `run_extract_card_subgraph.py` to generate one JSON payload from local CARD 
 ```bash
 python run_extract_card_subgraph.py \
   --accession Q182T3 \
-  --map-file map_file/CARD-UniProt-Mapping.tsv \
-  --obo-file ~/amr/databases/card/ontology/aro.obo \
-  --card-json ~/amr/databases/card/data/card.json \
-  --categories-file ~/amr/databases/card/data/aro_categories.tsv \
+  --map-file mock_api_inputs/CARD-UniProt-Mapping.tsv \
+  --obo-file mock_api_inputs/aro.obo \
+  --card-json mock_api_inputs/card.json \
+  --categories-file mock_api_inputs/aro_categories.tsv \
   --outdir card_api_data \
   --include-uniprot
 ```
@@ -79,7 +80,7 @@ This writes:
 card_api_data/ARO3007637_Q182T3.json
 ```
 
-This step simulates the CARD backend preparing the response that a future API endpoint would return.
+**IMPORTANT:** This step simulates the CARD backend preparing the response that a future API endpoint would return. Once CARD provides that API, the frontend will not need `run_extract_card_subgraph.py` or any of the local files in `mock_api_inputs/`; it will consume the API response directly.
 
 ## 2. Generate All Mock API Payloads
 
@@ -99,13 +100,13 @@ while IFS=$'\t' read -r upkb aro short_name rm_aro mechanism card_url; do
 
   python run_extract_card_subgraph.py \
     --accession "$upkb" \
-    --map-file map_file/CARD-UniProt-Mapping.tsv \
-    --obo-file ~/amr/databases/card/ontology/aro.obo \
-    --card-json ~/amr/databases/card/data/card.json \
-    --categories-file ~/amr/databases/card/data/aro_categories.tsv \
+    --map-file mock_api_inputs/CARD-UniProt-Mapping.tsv \
+    --obo-file mock_api_inputs/aro.obo \
+    --card-json mock_api_inputs/card.json \
+    --categories-file mock_api_inputs/aro_categories.tsv \
     --outdir card_api_data \
     --include-uniprot
-done < map_file/CARD-UniProt-Mapping.tsv
+done < mock_api_inputs/CARD-UniProt-Mapping.tsv
 ```
 
 The expected output pattern is:
