@@ -43,7 +43,7 @@ For example, `card_api_data/ARO3007637_Q182T3.json` is the mock API response for
 Create and activate the virtual environment, then install dependencies:
 
 ```bash
-python -m venv ~/myenvs/cardvis_env
+python -m venv ~/my_envs/cardvis_env
 source ~/myenvs/cardvis_env/bin/activate
 pip install -r cardvis_env_requirements.txt
 ```
@@ -96,61 +96,13 @@ The expected output pattern is:
 card_api_data/ARO<NUMBER>_<ACCESSION>.json
 ```
 
-After this step, `card_api_data/` acts as a local mock CARD API dataset for the mapped UniProt accessions. The script prints progress as it runs, for example:
-
-```text
-[1/4496] Generating A6T5M6 -> card_api_data/ARO3003373_A6T5M6.json
-[1/4496] OK A6T5M6
-```
-
-If an accession fails, the script continues and logs the failed UniProt accession, ARO, and CARD URL to:
+After this step, `card_api_data/` acts as a local mock CARD API dataset for the mapped UniProt accessions. The script prints progress as it runs, and if an accession fails, the script continues and logs the failed UniProt accession, ARO, and CARD URL to:
 
 ```text
 card_api_data/generation_failures.tsv
 ```
 
-To check how many payloads were generated:
-
-```bash
-ls card_api_data/ARO*.json | wc -l
-```
-
-## 3. Generate All Demo HTML Graphs
-
-After generating the mock API JSON payloads, render every payload as a local interactive HTML graph:
-
-```bash
-bash generate_all_html.sh
-```
-
-This is optional. The JSON files in `card_api_data/` are the mock API responses. The HTML files in `demo_html/` are only for local demo/review.
-
-The script uses the light theme and writes:
-
-```text
-demo_html/ARO<NUMBER>_<ACCESSION>.html
-```
-
-It prints progress as it runs, for example:
-
-```text
-[1/4496] Rendering card_api_data/ARO3003373_A6T5M6.json -> demo_html/ARO3003373_A6T5M6.html
-[1/4496] OK ARO3003373_A6T5M6
-```
-
-If rendering fails for a payload, the script continues and logs the failed accession, ARO, and JSON path to:
-
-```text
-demo_html/render_failures.tsv
-```
-
-To check how many HTML graphs were generated:
-
-```bash
-ls demo_html/ARO*.html | wc -l
-```
-
-## 4. Render One Mock API Payload
+## 3. Render One Mock API Payload
 
 Use `run_render_kg.py` to render one generated JSON payload:
 
@@ -214,6 +166,29 @@ python run_render_kg.py \
 
 Debug outputs use the same ARO/accession basename, for example `trace_ARO3007637_Q182T3.csv`, so they remain unambiguous if one UniProt accession has multiple CARD ARO mappings.
 
+
+## 4. Generate All Demo HTML Graphs
+
+After generating the mock API JSON payloads, render every payload as a local interactive HTML graph:
+
+```bash
+bash generate_all_html.sh
+```
+
+This is optional. The JSON files in `card_api_data/` are the mock API responses. The HTML files in `demo_html/` are only for local demo/review.
+
+The script uses the light theme and writes:
+
+```text
+demo_html/ARO<NUMBER>_<ACCESSION>.html
+```
+
+It prints progress as it runs, and if rendering fails for a payload, the script continues and logs the failed accession, ARO, and JSON path to:
+
+```text
+demo_html/render_failures.tsv
+```
+
 ## Code Layout
 
 `run_extract_card_subgraph.py` generates one mock API payload from local CARD files.
@@ -234,11 +209,6 @@ Open a generated demo graph directly in Firefox:
 
 ```bash
 firefox demo_html/ARO3007637_Q182T3.html
-```
-
-Other generated examples may include:
-
-```bash
 firefox demo_html/ARO3003373_A6T5M6.html
 firefox demo_html/ARO3000263_P0ACH7.html
 ```
