@@ -66,7 +66,7 @@ def main() -> None:
         aro_override=args.aro_root,
     )
 
-    payload = to_payload(graph, aro_root=aro, accession=args.accession, include_uniprot=True)
+    payload = to_payload(graph, aro_root=aro, accession=args.accession, include_uniprot=args.include_uniprot)
 
     with open(out_path, "w") as fh:
         json.dump(payload, fh, indent=2)
