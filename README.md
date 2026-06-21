@@ -88,6 +88,10 @@ To generate one graph payload for each of the 4496 UniProt mappings, run this on
 
 ```bash
 mkdir -p card_api_data
+rm -f card_api_data/generation_failures.tsv
+
+total=$(($(wc -l < mock_api_inputs/CARD-UniProt-Mapping.tsv) - 1))
+i=0
 
 while IFS=$'\t' read -r upkb aro short_name rm_aro mechanism card_url; do
   if [ "$upkb" = "UPKB" ]; then
@@ -98,15 +102,36 @@ while IFS=$'\t' read -r upkb aro short_name rm_aro mechanism card_url; do
     continue
   fi
 
-  python run_extract_card_subgraph.py \
+  i=$((i + 1))
+  outfile="card_api_data/${aro//:/}_${upkb}.json"
+
+  printf '[%s/%s] Generating %s -> %s\n' "$i" "$total" "$upkb" "$outfile"
+
+  if python run_extract_card_subgraph.py \
     --accession "$upkb" \
     --map-file mock_api_inputs/CARD-UniProt-Mapping.tsv \
     --obo-file mock_api_inputs/aro.obo \
     --card-json mock_api_inputs/card.json \
     --categories-file mock_api_inputs/aro_categories.tsv \
     --outdir card_api_data \
-    --include-uniprot
+    --include-uniprot; then
+    printf '[%s/%s] OK %s\n' "$i" "$total" "$upkb"
+  else
+    printf '[%s/%s] FAILED %s %s\n' "$i" "$total" "$upkb" "$aro"
+    printf '%s\t%s\t%s\n' "$upkb" "$aro" "$card_url" >> card_api_data/generation_failures.tsv
+  fi
 done < mock_api_inputs/CARD-UniProt-Mapping.tsv
+
+printf 'Generated payloads: '
+ls card_api_data/ARO*.json | wc -l
+
+if [ -f card_api_data/generation_failures.tsv ]; then
+  printf 'Failures: '
+  wc -l < card_api_data/generation_failures.tsv
+  printf 'Failure report: card_api_data/generation_failures.tsv\n'
+else
+  printf 'Failures: 0\n'
+fi
 ```
 
 The expected output pattern is:
@@ -116,6 +141,19 @@ card_api_data/ARO<NUMBER>_<ACCESSION>.json
 ```
 
 After this step, `card_api_data/` acts as a local mock CARD API dataset for the mapped UniProt accessions.
+
+The loop prints progress as it runs, for example:
+
+```text
+[1/4496] Generating A6T5M6 -> card_api_data/ARO3003373_A6T5M6.json
+[1/4496] OK A6T5M6
+```
+
+If an accession fails, the loop continues and logs the failed UniProt accession, ARO, and CARD URL to:
+
+```text
+card_api_data/generation_failures.tsv
+```
 
 To check how many payloads were generated:
 
