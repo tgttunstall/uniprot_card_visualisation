@@ -162,8 +162,8 @@ The script uses the light theme and writes:
 ```text
 demo_html/ARO<NUMBER>_<ACCESSION>.html
 ```
-This is optional. The JSON files in `card_api_data/` are the mock API responses. The HTML files in `demo_html/` are only for local demo/review.
-It prints progress as it runs, and if rendering fails for a payload, the script continues and logs the failed accession, ARO, and JSON path to:
+
+The script prints progress as it runs, skips existing HTML files, and can be safely rerun after an interrupted or partial run. If rendering fails for a payload, the script continues and logs the failed accession, ARO, and JSON path to:
 
 ```text
 demo_html/render_failures.tsv
