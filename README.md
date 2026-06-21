@@ -84,54 +84,10 @@ card_api_data/ARO3007637_Q182T3.json
 
 ## 2. Generate All Mock API Payloads
 
-To generate one graph payload for each of the 4496 UniProt mappings, run this one-off loop from the repo root:
+To generate one graph payload for each of the 4496 UniProt mappings, run:
 
 ```bash
-mkdir -p card_api_data
-rm -f card_api_data/generation_failures.tsv
-
-total=$(($(wc -l < mock_api_inputs/CARD-UniProt-Mapping.tsv) - 1))
-i=0
-
-while IFS=$'\t' read -r upkb aro short_name rm_aro mechanism card_url; do
-  if [ "$upkb" = "UPKB" ]; then
-    continue
-  fi
-
-  if [ -z "$upkb" ]; then
-    continue
-  fi
-
-  i=$((i + 1))
-  outfile="card_api_data/${aro//:/}_${upkb}.json"
-
-  printf '[%s/%s] Generating %s -> %s\n' "$i" "$total" "$upkb" "$outfile"
-
-  if python run_extract_card_subgraph.py \
-    --accession "$upkb" \
-    --map-file mock_api_inputs/CARD-UniProt-Mapping.tsv \
-    --obo-file mock_api_inputs/aro.obo \
-    --card-json mock_api_inputs/card.json \
-    --categories-file mock_api_inputs/aro_categories.tsv \
-    --outdir card_api_data \
-    --include-uniprot; then
-    printf '[%s/%s] OK %s\n' "$i" "$total" "$upkb"
-  else
-    printf '[%s/%s] FAILED %s %s\n' "$i" "$total" "$upkb" "$aro"
-    printf '%s\t%s\t%s\n' "$upkb" "$aro" "$card_url" >> card_api_data/generation_failures.tsv
-  fi
-done < mock_api_inputs/CARD-UniProt-Mapping.tsv
-
-printf 'Generated payloads: '
-ls card_api_data/ARO*.json | wc -l
-
-if [ -f card_api_data/generation_failures.tsv ]; then
-  printf 'Failures: '
-  wc -l < card_api_data/generation_failures.tsv
-  printf 'Failure report: card_api_data/generation_failures.tsv\n'
-else
-  printf 'Failures: 0\n'
-fi
+bash generate_all_mock_payloads.sh
 ```
 
 The expected output pattern is:
@@ -140,16 +96,14 @@ The expected output pattern is:
 card_api_data/ARO<NUMBER>_<ACCESSION>.json
 ```
 
-After this step, `card_api_data/` acts as a local mock CARD API dataset for the mapped UniProt accessions.
-
-The loop prints progress as it runs, for example:
+After this step, `card_api_data/` acts as a local mock CARD API dataset for the mapped UniProt accessions. The script prints progress as it runs, for example:
 
 ```text
 [1/4496] Generating A6T5M6 -> card_api_data/ARO3003373_A6T5M6.json
 [1/4496] OK A6T5M6
 ```
 
-If an accession fails, the loop continues and logs the failed UniProt accession, ARO, and CARD URL to:
+If an accession fails, the script continues and logs the failed UniProt accession, ARO, and CARD URL to:
 
 ```text
 card_api_data/generation_failures.tsv
@@ -161,7 +115,42 @@ To check how many payloads were generated:
 ls card_api_data/ARO*.json | wc -l
 ```
 
-## 3. Render One Mock API Payload
+## 3. Generate All Demo HTML Graphs
+
+After generating the mock API JSON payloads, render every payload as a local interactive HTML graph:
+
+```bash
+bash generate_all_html.sh
+```
+
+This is optional. The JSON files in `card_api_data/` are the mock API responses. The HTML files in `demo_html/` are only for local demo/review.
+
+The script uses the light theme and writes:
+
+```text
+demo_html/ARO<NUMBER>_<ACCESSION>.html
+```
+
+It prints progress as it runs, for example:
+
+```text
+[1/4496] Rendering card_api_data/ARO3003373_A6T5M6.json -> demo_html/ARO3003373_A6T5M6.html
+[1/4496] OK ARO3003373_A6T5M6
+```
+
+If rendering fails for a payload, the script continues and logs the failed accession, ARO, and JSON path to:
+
+```text
+demo_html/render_failures.tsv
+```
+
+To check how many HTML graphs were generated:
+
+```bash
+ls demo_html/ARO*.html | wc -l
+```
+
+## 4. Render One Mock API Payload
 
 Use `run_render_kg.py` to render one generated JSON payload:
 
@@ -170,18 +159,31 @@ python run_render_kg.py \
   --accession Q182T3 \
   --aro-id ARO:3007637 \
   --subgraph-json card_api_data/ARO3007637_Q182T3.json \
-  --outdir card_api_data \
+  --outdir demo_html \
   --formats pyvis \
-  --theme dark
+  --theme light
 ```
 
 This reads the local mock API response and writes an interactive graph:
 
 ```text
-card_api_data/ARO3007637_Q182T3.html
+demo_html/ARO3007637_Q182T3.html
 ```
 
 This step simulates the frontend receiving `ARO3007637_Q182T3.json` from a future CARD API endpoint and rendering it.
+
+To render and open the demo graph in Firefox:
+
+```bash
+python run_render_kg.py \
+  --accession Q182T3 \
+  --aro-id ARO:3007637 \
+  --subgraph-json card_api_data/ARO3007637_Q182T3.json \
+  --outdir demo_html \
+  --formats pyvis \
+  --theme light && \
+firefox demo_html/ARO3007637_Q182T3.html
+```
 
 `--accession` and `--aro-id` are both required so rendering is explicit if one UniProt accession has multiple CARD ARO mappings. If `--subgraph-json` is omitted, the renderer expects the file at:
 
@@ -200,9 +202,9 @@ python run_render_kg.py \
   --accession Q182T3 \
   --aro-id ARO:3007637 \
   --subgraph-json card_api_data/ARO3007637_Q182T3.json \
-  --outdir card_api_data \
+  --outdir demo_html \
   --formats pyvis \
-  --theme dark \
+  --theme light \
   --trace
 ```
 
@@ -214,7 +216,11 @@ Debug outputs use the same ARO/accession basename, for example `trace_ARO3007637
 
 `run_extract_card_subgraph.py` generates one mock API payload from local CARD files.
 
+`generate_all_mock_payloads.sh` generates all mock API JSON payloads from `mock_api_inputs/CARD-UniProt-Mapping.tsv` into `card_api_data/`.
+
 `run_render_kg.py` renders one generated payload as an interactive PyVis HTML graph.
+
+`generate_all_html.sh` renders all generated JSON payloads from `card_api_data/` into light-theme HTML graphs in `demo_html/`.
 
 `src/card_vis_extract.py` contains mapping lookup, CARD subgraph extraction, variant/SNP enrichment, and payload creation.
 
