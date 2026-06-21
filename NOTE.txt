@@ -1,0 +1,31 @@
+CARD-UniProt mapping notes
+
+Input mapping file:
+mock_api_inputs/CARD-UniProt-Mapping.tsv
+
+Observed counts:
+- Mapping rows after header: 4496
+- Unique UniProt accessions: 4480
+- Unique UniProt + ARO pairs: 4494
+- Exact duplicate UniProt + ARO rows: 2
+- UniProt accessions with more than one distinct ARO mapping: 14
+
+The expected number of unique mock API JSON payloads is 4494, not 4496,
+because two rows are exact duplicate UniProt + ARO mappings.
+
+UniProt accessions with multiple distinct ARO mappings:
+
+A0A0A1IR40  ARO:3001137, ARO:3003154
+A0A0R6L508  ARO:3003689, ARO:3007280
+A0A1Z1VQN1  ARO:3004356, ARO:3006596
+A0A290DEA6  ARO:3004342, ARO:3006601
+A0A2I8ANL2  ARO:3004347, ARO:3006615
+A0A4P8DZS1  ARO:3004340, ARO:3006692
+A0A6C0VU22  ARO:3004350, ARO:3006766
+A0A6N0D3S1  ARO:3004336, ARO:3006819
+A0AAE9VSR8  ARO:3001399, ARO:3001427
+A0AAJ6MLF5  ARO:3001826, ARO:3007911
+A8D3N0      ARO:3002723, ARO:3003188
+D5HKL4      ARO:3006871, ARO:3006998
+P13661      ARO:3001396, ARO:3001452
+Q8GQB0      ARO:3004294, ARO:3005558
